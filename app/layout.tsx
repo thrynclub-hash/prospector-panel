@@ -18,7 +18,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Prospector de Sites",
+  title: "Hunter of Bad Pages",
   description: "Encontre negócios locais com site fraco, redesenhe e feche clientes — tudo num painel só.",
 };
 
