@@ -33,7 +33,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "internal" }, { status: 500 });
   }
 
-  await sendMagicLinkEmail({ to: normalizedEmail, magicLink: linkData.properties.action_link });
+  try {
+    await sendMagicLinkEmail({ to: normalizedEmail, magicLink: linkData.properties.action_link });
+  } catch (emailError) {
+    console.error("send-login-link: e-mail falhou", emailError);
+    return NextResponse.json({ ok: false, error: "email_failed" }, { status: 502 });
+  }
 
   return NextResponse.json({ ok: true });
 }

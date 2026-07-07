@@ -3,7 +3,7 @@ import { Resend } from "resend";
 export async function sendMagicLinkEmail({ to, magicLink }: { to: string; magicLink: string }) {
   const resend = new Resend(process.env.RESEND_API_KEY);
   await resend.emails.send({
-    from: "Hunter of Bad Pages <acesso@hunterofbadpages.com>",
+    from: "Hunter of Bad Pages <acesso@toqy.com.br>",
     to,
     subject: "Seu acesso ao Hunter of Bad Pages está pronto",
     html: `
