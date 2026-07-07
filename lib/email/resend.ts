@@ -1,8 +1,7 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function sendMagicLinkEmail({ to, magicLink }: { to: string; magicLink: string }) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
   await resend.emails.send({
     from: "Hunter of Bad Pages <acesso@hunterofbadpages.com>",
     to,
