@@ -10,7 +10,7 @@ O painel hoje só tem o esqueleto de assinatura (Kiwify + Supabase Auth + `/pain
 - Fases inteiras (0, 1, 2...): trabalho planejado do milestone
 - Fases decimais (2.1, 2.2): inserções urgentes (marcadas com INSERTED)
 
-- [ ] **Phase 0: Fundação** - Guard de auth+assinatura compartilhado no `/painel` + migrations versionadas do Supabase
+- [x] **Phase 0: Fundação** - Guard de auth+assinatura compartilhado no `/painel` + migrations versionadas do Supabase
 - [ ] **Phase 1: Buscar** - Busca de leads via Google Maps, compatível com os termos do Places, com limite de uso
 - [ ] **Phase 2: Redesenhar** - Geração de landing page por IA + comparador antes/depois, com separação fato/gerado
 - [ ] **Phase 3: Editor** - Edição de texto/imagem da página gerada, com sinalização de campos de IA
@@ -31,7 +31,7 @@ O painel hoje só tem o esqueleto de assinatura (Kiwify + Supabase Auth + `/pain
 **Plans**: TBD (refinar em `/gsd:plan-phase 0`)
 
 Plans:
-- [ ] 00-01: Baseline de migrations (capturar schema atual) + `app/painel/layout.tsx` guard compartilhado
+- [x] 00-01: Baseline de migrations (capturar schema atual) + `app/painel/layout.tsx` guard compartilhado
 
 ### Phase 1: Buscar
 **Goal**: Assinante encontra negócios locais com site ruim e nota alta, sem violar os termos de cache do Google Places.
@@ -123,7 +123,7 @@ Fases executam em ordem numérica: 0 → 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|-----------------|--------|-----------|
-| 0. Fundação | 0/1 | Not started | - |
+| 0. Fundação | 1/1 | Complete | 2026-07-08 |
 | 1. Buscar | 0/2 | Not started | - |
 | 2. Redesenhar | 0/2 | Not started | - |
 | 3. Editor | 0/1 | Not started | - |

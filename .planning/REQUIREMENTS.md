@@ -9,8 +9,8 @@
 
 <!-- Pré-requisito estrutural — sem tela própria, mas bloqueante para todo o resto. -->
 
-- [ ] **FOUND-01**: Toda página sob `/painel/*` exige sessão ativa E assinatura com `status = "active"` (guard compartilhado, corrige o gap hoje só verifica sessão)
-- [ ] **FOUND-02**: Schema do Supabase (tabela existente `prospector_customers` + todas as tabelas novas deste milestone) versionado em `supabase/migrations/`
+- [x] **FOUND-01**: Toda página sob `/painel/*` exige sessão ativa E assinatura com `status = "active"` (guard compartilhado, corrige o gap hoje só verifica sessão)
+- [x] **FOUND-02**: Schema do Supabase (tabela existente `prospector_customers` + todas as tabelas novas deste milestone) versionado em `supabase/migrations/`
 - [ ] **FOUND-03**: Cada assinante tem um limite diário de buscas (Buscar) e de gerações de redesign (Redesenhar), aplicado no servidor e visível na UI
 
 ### Buscar
@@ -76,8 +76,8 @@ Preenchido durante a criação do roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | Phase 0 | Pending |
-| FOUND-02 | Phase 0 | Pending |
+| FOUND-01 | Phase 0 | Complete |
+| FOUND-02 | Phase 0 | Complete |
 | FOUND-03 | Phase 1 / Phase 2 | Pending |
 | BUSCA-01 | Phase 1 | Pending |
 | BUSCA-02 | Phase 1 | Pending |
