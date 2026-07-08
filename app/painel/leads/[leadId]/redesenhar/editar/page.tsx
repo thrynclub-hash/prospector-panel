@@ -3,8 +3,14 @@ import { redirect, notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { RedesignContent } from "@/types/redesign-content";
-import { EditorForm } from "./editor-form";
+import { RedesignPreview } from "../redesign-preview";
 
+// Fase 02.2: substitui o formulário (editor-form.tsx, Fase 3) pela edição
+// inline direto no preview real -- clicar em texto edita no lugar, clicar em
+// imagem troca via upload; cada edição salva sozinha (sem botão "Salvar
+// edição" -- ver RedesignPreview/editable-field.tsx). A rota/entrada
+// (/editar, o botão "Editar" na página principal) permanece a mesma; só o
+// conteúdo interno muda -- nenhuma mudança em redesenhar/page.tsx.
 export default async function EditarPage({ params }: { params: Promise<{ leadId: string }> }) {
   const { leadId } = await params;
   const supabase = await createSupabaseServerClient();
@@ -32,23 +38,21 @@ export default async function EditarPage({ params }: { params: Promise<{ leadId:
   const content = redesign.content as RedesignContent;
 
   return (
-    <main className="min-h-screen bg-bg px-6 py-16">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-bg">
+      <div className="sticky top-0 z-30 bg-ink text-white px-4 py-2.5 text-xs sm:text-sm flex items-center gap-3 flex-wrap">
         <Link
           href={`/painel/leads/${leadId}/redesenhar`}
-          className="inline-flex items-center gap-2 text-sm text-muted hover:text-ink mb-8"
+          className="inline-flex items-center gap-1.5 hover:opacity-80 shrink-0"
         >
-          <ArrowLeft size={16} /> Voltar
+          <ArrowLeft size={14} /> Voltar
         </Link>
-
-        <h1 className="font-display font-bold text-3xl text-ink mb-2">Editar redesign</h1>
-        <p className="text-muted mb-2">{content.facts.name}</p>
-        <p className="text-xs text-muted mb-8">
-          Dados verificados (nome, endereço, nota) não são editáveis aqui — vêm direto do Google e não podem virar texto de marketing sem checagem.
-        </p>
-
-        <EditorForm redesignId={redesign.id} initialContent={content} />
+        <span className="text-white/40">·</span>
+        <span className="text-white/90">
+          Modo edição — clique em qualquer texto ou foto abaixo pra editar direto. Dados verificados (nome, endereço,
+          nota, horário) não são editáveis aqui.
+        </span>
       </div>
-    </main>
+      <RedesignPreview content={content} editable redesignId={redesign.id} />
+    </div>
   );
 }
