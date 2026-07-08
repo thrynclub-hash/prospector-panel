@@ -37,6 +37,7 @@ export function ProposalSection({
   const [whatsappText, setWhatsappText] = useState(initialProposal?.whatsapp_text ?? "");
   const [generating, setGenerating] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
   const [confirmingSend, setConfirmingSend] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -77,6 +78,8 @@ export function ProposalSection({
         return false;
       }
       setProposal(data.proposal);
+      setJustSaved(true);
+      setTimeout(() => setJustSaved(false), 2000);
       return true;
     } catch {
       setError("Erro de conexão. Tenta de novo.");
@@ -183,7 +186,7 @@ export function ProposalSection({
           className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-border text-sm font-medium text-ink hover:border-accent hover:text-accent transition-colors disabled:opacity-50"
         >
           {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
-          Salvar edição
+          {justSaved ? "Salvo ✓" : "Salvar edição"}
         </button>
 
         {phone && (

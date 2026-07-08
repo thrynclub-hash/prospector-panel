@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Loader2, Mail, AlertTriangle, CheckCircle2, Star } from "lucide-react";
+import { Search, Loader2, Mail, Phone, AlertTriangle, CheckCircle2, Star } from "lucide-react";
 import type { SearchResultItem } from "@/app/api/leads/search/route";
 
 export function SearchForm({ initialQuota }: { initialQuota: { used: number; limit: number } }) {
@@ -133,6 +133,12 @@ export function SearchForm({ initialQuota }: { initialQuota: { used: number; lim
                     <span className="flex items-center gap-1 px-2 py-1 rounded-full bg-surface border border-border text-muted">
                       <Mail size={12} />
                       {item.publicEmail}
+                    </span>
+                  )}
+                  {item.phone && (
+                    <span className="flex items-center gap-1 px-2 py-1 rounded-full bg-surface border border-border text-muted">
+                      <Phone size={12} />
+                      {item.phone}
                     </span>
                   )}
                 </div>

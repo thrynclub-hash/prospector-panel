@@ -20,6 +20,7 @@ export interface SearchResultItem {
   pagespeedScore: number | null;
   isBadSite: boolean;
   publicEmail: string | null;
+  phone: string | null;
 }
 
 async function enrich(place: PlaceResult): Promise<SearchResultItem> {
@@ -42,6 +43,12 @@ async function enrich(place: PlaceResult): Promise<SearchResultItem> {
     pagespeedScore,
     isBadSite,
     publicEmail,
+    // Fase 5 (PROPOSTA-02): mostrado na lista só como sinal pro assinante
+    // escolher leads com WhatsApp disponível antes de gerar -- não é
+    // persistido em `leads` (o dado real usado no botão de WhatsApp vem de
+    // redesigns.content.facts.phone, capturado de novo via Place Details na
+    // geração, não daqui).
+    phone: place.internationalPhoneNumber ?? null,
   };
 }
 
