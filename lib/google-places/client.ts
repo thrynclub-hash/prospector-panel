@@ -39,6 +39,7 @@ const DETAILS_FIELD_MASK = [
   "primaryType",
   "photos",
   "internationalPhoneNumber",
+  "regularOpeningHours",
 ].join(",");
 
 export interface PlaceResult {
@@ -52,6 +53,15 @@ export interface PlaceResult {
   primaryType?: string;
   photos?: Array<{ name: string }>;
   internationalPhoneNumber?: string;
+  // Fase 02.2 (REDESENHAR-05-adjacent): weekdayDescriptions já vem formatado
+  // e localizado pelo Google (ex. "segunda-feira: 09:00 – 18:00") -- preferido
+  // a `periods` (estrutura bruta) pra não reimplementar formatação de
+  // dia-da-semana em português. Confirmado contra
+  // https://developers.google.com/maps/documentation/places/web-service/data-fields
+  // que este campo já está na mesma Enterprise SKU que internationalPhoneNumber/
+  // rating/userRatingCount/websiteUri (todos já pedidos acima) -- adicioná-lo
+  // NÃO muda o tier de billing desta chamada.
+  regularOpeningHours?: { weekdayDescriptions?: string[] };
 }
 
 export function createGooglePlacesClient() {
@@ -95,7 +105,7 @@ export function createGooglePlacesClient() {
      * PITFALLS.md Pitfall 1, só place_id pode ser cacheado indefinidamente).
      */
     async getDetails(placeId: string): Promise<PlaceResult | null> {
-      const res = await fetch(`https://places.googleapis.com/v1/places/${placeId}`, {
+      const res = await fetch(`https://places.googleapis.com/v1/places/${placeId}?languageCode=pt-BR`, {
         headers: {
           "X-Goog-Api-Key": apiKey,
           "X-Goog-FieldMask": DETAILS_FIELD_MASK,
