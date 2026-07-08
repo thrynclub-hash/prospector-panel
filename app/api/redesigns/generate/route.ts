@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     // publicamente na Fase 4). Continuam sendo o FALLBACK quando o site
     // original não tiver fotos aproveitáveis (REDESENHAR-05) -- ver bloco
     // não-bloqueante logo abaixo do try/catch.
-    const photoNames = (details.photos ?? []).slice(0, 3).map((p) => p.name);
+    const photoNames = (details.photos ?? []).slice(0, 8).map((p) => p.name);
     placesPhotoUrls = [];
     for (const photoName of photoNames) {
       const photo = await placesClient.fetchPhotoBytes(photoName).catch(() => null);
@@ -88,6 +88,7 @@ export async function POST(request: Request) {
       websiteUrl: details.websiteUri ?? null,
       rating: details.rating ?? null,
       userRatingCount: details.userRatingCount ?? null,
+      openingHours: details.regularOpeningHours?.weekdayDescriptions ?? null,
     };
   } catch (err) {
     // Erros daqui (Places, AI Gateway, Storage) não podem virar um 500 HTML
