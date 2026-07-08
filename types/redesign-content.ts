@@ -18,6 +18,14 @@
 // segue o mesmo padrão já usado por `facts`: escrito uma vez na geração,
 // read-only depois (nunca aceito do body do PATCH). Redesigns gerados antes
 // desta fase não têm essa chave -- por isso é opcional, não só nullable.
+//
+// Fase 02.2: `facts.openingHours` -- ao contrário de `theme`, é um dado
+// VERIFICADO do próprio negócio (vem de regularOpeningHours.weekdayDescriptions
+// do Places, mesma fonte que phone/address/rating), por isso entra dentro de
+// `facts`, não como chave-irmã. Aditivo/opcional pelo mesmo motivo de sempre:
+// redesigns gerados antes desta fase não têm essa chave. `null` quando o
+// negócio não declara horário no Google Maps -- NUNCA inventado (skill
+// redesign-premium, regra 1).
 export interface RedesignContent {
   facts: {
     name: string;
@@ -27,6 +35,7 @@ export interface RedesignContent {
     websiteUrl: string | null;
     rating: number | null;
     userRatingCount: number | null;
+    openingHours?: string[] | null;
   };
   generated: {
     heroHeadline: string;
