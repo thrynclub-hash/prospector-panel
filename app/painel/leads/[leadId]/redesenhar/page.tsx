@@ -8,6 +8,7 @@ import { GenerateButton } from "./generate-button";
 import { Comparator } from "./comparator";
 import { DeleteRedesignButton } from "./delete-redesign-button";
 import { PublishButton } from "./publish-button";
+import { ProposalSection } from "./proposal-section";
 
 export default async function RedesenharPage({ params }: { params: Promise<{ leadId: string }> }) {
   const { leadId } = await params;
@@ -22,7 +23,7 @@ export default async function RedesenharPage({ params }: { params: Promise<{ lea
 
   const { data: lead } = await supabase
     .from("leads")
-    .select("id, place_id, status")
+    .select("id, place_id, status, public_email")
     .eq("id", leadId)
     .eq("user_id", user.id)
     .maybeSingle();
@@ -31,7 +32,7 @@ export default async function RedesenharPage({ params }: { params: Promise<{ lea
     notFound();
   }
 
-  const [quota, { data: redesign }] = await Promise.all([
+  const [quota, { data: redesign }, { data: suppression }] = await Promise.all([
     checkQuota(supabase, user.id, "redesign_generate"),
     supabase
       .from("redesigns")
@@ -40,7 +41,20 @@ export default async function RedesenharPage({ params }: { params: Promise<{ lea
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle(),
+    supabase
+      .from("contacted_businesses")
+      .select("opted_out_at")
+      .eq("place_id", lead.place_id)
+      .maybeSingle(),
   ]);
+
+  const { data: proposal } = redesign
+    ? await supabase
+        .from("proposals")
+        .select("id, email_subject, email_body, whatsapp_text, email_sent_at")
+        .eq("redesign_id", redesign.id)
+        .maybeSingle()
+    : { data: null };
 
   return (
     <main className="min-h-screen bg-bg px-6 py-16">
@@ -97,6 +111,15 @@ export default async function RedesenharPage({ params }: { params: Promise<{ lea
 
             <div className="pt-2 border-t border-border" />
             <PublishButton redesignId={redesign.id} initialIsPublic={redesign.is_public} initialSlug={redesign.public_slug} />
+
+            <ProposalSection
+              redesignId={redesign.id}
+              isPublic={redesign.is_public}
+              phone={(redesign.content as RedesignContent).facts.phone}
+              publicEmail={lead.public_email}
+              initialProposal={proposal}
+              suppression={suppression}
+            />
 
             <div className="flex items-center gap-3 flex-wrap">
               <GenerateButton leadId={leadId} disabled={quota.used >= quota.limit} />
