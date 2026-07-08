@@ -74,11 +74,11 @@ Plans:
 **Goal:** Elevar a estrutura da página gerada ao padrão completo da skill `redesign-premium` (CTAs, seção localização/mapa/horário, mais fotos, tipografia) e trocar o Editor pra edição inline (clicar-editar direto no preview).
 **Requirements**: TBD (ver 02.2-CONTEXT.md)
 **Depends on:** Phase 2
-**Plans**: 1/2 plans executados — wave 1 (dados) completa (2026-07-08), wave 2 (estrutura + editor inline) pendente
+**Plans**: 2/2 plans executados — Phase COMPLETE (2026-07-08)
 
 Plans:
 - [x] 02.2-01 (wave 1): Pré-requisito de dados -- `facts.openingHours` (Places field mask `regularOpeningHours` + `languageCode=pt-BR`, populado em `generate/route.ts`, nunca inventado) + cap de fotos 3→8 simétrico (Places fallback + site-scrape). Ver `02.2-01-SUMMARY.md`.
-- [ ] 02.2-02 (wave 2): Seção localização/mapa/horário no preview + galeria de até 8 fotos + edição inline no preview (depende de 02.2-01)
+- [x] 02.2-02 (wave 2): `RedesignPreview` reescrito no padrão `redesign-premium` (hero 2 CTAs, seção localização/mapa/horário, galeria de até 8 fotos, tipografia Playfair+Inter escopada) + editor inline (clicar-editar texto/foto, substitui `editor-form.tsx`). Ver `02.2-02-SUMMARY.md`.
 
 ### Phase 02.1: Reusar logo, paleta de cores e fotos do site original do lead no redesign gerado (INSERTED)
 
@@ -170,4 +170,4 @@ Fases executam em ordem numérica: 0 → 1 → 2 → 3 → 4 → 5 → 6
 | 5. Proposta | 6/6 | Complete (testes manuais parciais) | 2026-07-08 |
 | 6. Tabela de Preço | 1/1 | Complete | 2026-07-08 |
 | 02.1. Reusar logo/paleta/fotos (INSERTED) | 1/1 | Complete | 2026-07-08 |
-| 02.2. Estrutura + editor inline (INSERTED) | 1/2 | In Progress (wave 1 done) | - |
+| 02.2. Estrutura + editor inline (INSERTED) | 2/2 | Complete | 2026-07-08 |
