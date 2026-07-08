@@ -84,7 +84,7 @@ export async function POST(request: Request) {
         name: details.displayName?.text ?? "(sem nome)",
         category: details.primaryType ?? null,
         address: details.formattedAddress ?? null,
-        phone: null,
+        phone: details.internationalPhoneNumber ?? null,
         websiteUrl: details.websiteUri ?? null,
         rating: details.rating ?? null,
         userRatingCount: details.userRatingCount ?? null,
