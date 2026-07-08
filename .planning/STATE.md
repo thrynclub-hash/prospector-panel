@@ -83,5 +83,15 @@ Nenhum ainda.
 ## Session Continuity
 
 Last session: 2026-07-08
-Stopped at: Milestone v1.0 completo (Fases 0-6) + Fase 02.1 (gap-closure, inserida após a Fase 2) implementada e verificada no código. **Falta rodar `vercel --prod --yes`** pra levar a Fase 02.1 pro ar (mesma pendência de deploy manual já anotada em Blockers). Depois do deploy, testar gerando um redesign novo pra um lead com site próprio (idealmente a Dra. Tania Higaki de novo) e confirmar visualmente que logo/cor/fotos reais aparecem. Fase 5 ainda com testes manuais pendentes (envio real/supressão/opt-out/cross-subscriber).
-Resume file: .planning/phases/02.1-reusar-logo-paleta-de-cores-e-fotos-do-site-original-do-lead-no-redesign-gerado/02.1-VERIFICATION.md
+Stopped at: Fase 02.1 (cor/logo/fotos) deployada e testada em produção pelo usuário — funcionou parcialmente (pegou fotos, mas resultado ainda "horrível" pro padrão de site de R$10k). Causa raiz identificada: a Fase 02.1 só resolveu cor/logo/foto, mas a ESTRUTURA da página (hero sem CTA, sem seção de localização/mapa/horário, Editor não-inline) nunca implementou a skill `redesign-premium` por completo. Usuário pediu explicitamente pra parar de pesquisar/discutir e só implementar direto, igual ao plugin original.
+
+**Fase 02.2 inserida e com CONTEXT.md já escrito** (`.planning/phases/02.2-.../02.2-CONTEXT.md`) combinando: (1) elevar estrutura da página gerada ao padrão completo da skill `redesign-premium` (CTAs, seção localização/mapa/horário, mais fotos, tipografia Playfair Display+Inter via ui-ux-pro-max) e (2) trocar o Editor pra edição inline (clicar-editar texto/imagem direto no preview, estilo do plugin original, adaptado pra React/PATCH já existente em vez do script de injeção HTML do plugin).
+
+**Sessão pausada por limite de contexto ANTES de planejar/executar.** Próximo passo direto (sem discuss-phase, pesquisa já dispensada pelo usuário):
+```
+/gsd:plan-phase 02.2 --skip-research
+```
+Depois: `/gsd:execute-phase 02.2`, depois `vercel --prod --yes` (deploy não é automático nesse projeto, ver Blockers).
+
+Pendências que continuam de antes (não mudaram): testes manuais da Fase 5 (envio real/supressão/opt-out/cross-subscriber).
+Resume file: .planning/phases/02.2-redesign-estrutura-editor-inline/02.2-CONTEXT.md

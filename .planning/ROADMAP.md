@@ -69,6 +69,16 @@ Plans:
 - `AI_GATEWAY_API_KEY` não configurada em `.env.local` — geração não roda localmente até essa chave existir (em produção na Vercel funciona via OIDC automático, sem variável extra).
 - Sem scrape de paleta/logo do site original do lead — o preview usa template neutro + fotos do Places, não a paleta real do negócio (fora do escopo desta fase; ver nota em `redesign-preview.tsx`).
 
+### Phase 02.2: Elevar estrutura do redesign gerado ao padrao redesign-premium (CTAs, secao de localizacao/mapa/horario, mais fotos) e trocar Editor para edicao inline (clicar-para-editar direto no preview) (INSERTED)
+
+**Goal:** [Urgent work - to be planned]
+**Requirements**: TBD
+**Depends on:** Phase 2
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 02.2 to break down)
+
 ### Phase 02.1: Reusar logo, paleta de cores e fotos do site original do lead no redesign gerado (INSERTED)
 
 **Goal:** O redesign gerado reaproveita logo, paleta de cores e fotos reais do site original do lead (quando disponíveis), em vez de só template neutro + fotos genéricas do Places -- corrige o gap de qualidade visual confirmado em teste manual real (2026-07-08, lead "Dra. Tania Higaki": redesign usou foto de estoque sem relação com o negócio).
