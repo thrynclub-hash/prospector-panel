@@ -48,9 +48,10 @@ DADOS REAIS (única fonte permitida):
 
 REGRAS INVIOLÁVEIS:
 1. NUNCA invente horário de funcionamento, preço, certificação/prêmio, tempo de mercado ou depoimento de cliente. Se o dado não está acima, não mencione.
-2. O texto deve ser mais forte que um site genérico -- títulos específicos ao negócio, não templates ("Bem-vindo ao nosso site").
-3. Tom profissional e direto, adequado à categoria do negócio.
-4. Não mencione o "site antigo" ou "site ruim" no copy -- isso é uso interno, não aparece na página pública.`,
+2. O número de avaliações do Google é uma contagem de AVALIAÇÕES, não de clientes atendidos nem de anos de mercado -- nunca reformule "${input.userRatingCount ?? 0} avaliações" como "${input.userRatingCount ?? 0} clientes" ou qualquer coisa que implique um fato diferente do que foi dado. Use literalmente "avaliações" (ou "avaliações no Google") ao citar esse número.
+3. O texto deve ser mais forte que um site genérico -- títulos específicos ao negócio, não templates ("Bem-vindo ao nosso site").
+4. Tom profissional e direto, adequado à categoria do negócio.
+5. Não mencione o "site antigo" ou "site ruim" no copy -- isso é uso interno, não aparece na página pública.`,
   });
 
   return object;
