@@ -6,9 +6,19 @@
 // fallback de hoje: template neutro + fotos do Places".
 const IMG_TAG_RE = /<img\b[^>]*>/gi;
 const SRC_RE = /\bsrc=["']([^"']+)["']/i;
+// Muitos sites (principalmente WordPress com plugin de lazy-load) deixam
+// `src` como um placeholder base64 1x1 e colocam a URL real da imagem num
+// atributo `data-*` -- nomes variam por plugin, então checa os mais comuns.
+const LAZY_SRC_RE = /\bdata-(?:src|lazy-src|original|lazy)=["']([^"']+)["']/i;
 const WIDTH_RE = /\bwidth=["']?(\d+)/i;
 const HEIGHT_RE = /\bheight=["']?(\d+)/i;
 const THEME_COLOR_RE = /<meta[^>]+name=["']theme-color["'][^>]*content=["']([^"']+)["']/i;
+// "theme-color" é metadado de UI de navegador (cor da barra de status
+// mobile), não necessariamente a cor de marca -- muitos temas deixam isso
+// branco/preto genérico por padrão. Um valor assim não é sinal de marca
+// nenhum; melhor cair em "sem cor" (null, template neutro) do que aplicar
+// um accent color invisível/sem contraste na página gerada.
+const GENERIC_COLOR_RE = /^#?(f{3}|f{6}|0{3}|0{6})$/i;
 
 const IGNORED_FILENAME_PATTERNS = ["icon", "sprite", "favicon", "logo", "pixel", "1x1", "spacer", "avatar"];
 const MIN_DIMENSION = 150;
@@ -54,13 +64,17 @@ export async function scrapeSiteAssets(
     const photoUrls: string[] = [];
     for (const imgTag of html.match(IMG_TAG_RE) ?? []) {
       if (photoUrls.length >= MAX_PHOTOS) break;
-      const src = imgTag.match(SRC_RE)?.[1];
+      let src = imgTag.match(SRC_RE)?.[1];
+      if (!src || src.startsWith("data:")) {
+        src = imgTag.match(LAZY_SRC_RE)?.[1] ?? src;
+      }
       if (!src || !isLikelyContentImage(imgTag, src)) continue;
       const resolved = resolveUrl(src, websiteUrl);
       if (resolved && !photoUrls.includes(resolved)) photoUrls.push(resolved);
     }
 
-    const themeColor = html.match(THEME_COLOR_RE)?.[1] ?? null;
+    const themeColorRaw = html.match(THEME_COLOR_RE)?.[1] ?? null;
+    const themeColor = themeColorRaw && !GENERIC_COLOR_RE.test(themeColorRaw.trim()) ? themeColorRaw : null;
 
     return { photoUrls, themeColor };
   } catch {
