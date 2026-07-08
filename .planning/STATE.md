@@ -36,6 +36,10 @@ Progress: [██████████] 100% (7/7 fases) — milestone v1.0 c
 
 ## Accumulated Context
 
+### Roadmap Evolution
+
+- Phase 02.1 inserida após a Phase 2: reusar logo, paleta de cores e fotos do site original do lead no redesign gerado (URGENT) — fecha o gap de qualidade visual identificado logo abaixo, confirmado num teste manual real em 2026-07-08.
+
 ### Decisions
 
 - **Fase 6**: Sem script de venda ou tratamento de objeções na tela de preço — só os dois valores do requirement (PRECO-01) + uma frase de contexto. Conteúdo além disso violaria AGENT-INTEGRITY (zero invenção sem fonte).

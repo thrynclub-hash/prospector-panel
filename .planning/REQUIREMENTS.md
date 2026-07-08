@@ -26,6 +26,7 @@
 - [x] **REDESENHAR-02**: O conteúdo gerado distingue campos reais/verificados (nome, endereço, telefone) de campos sugeridos pela IA (copy/marketing) — a IA nunca inventa horário de funcionamento, preço, certificação/prêmio, tempo de mercado ou depoimento de cliente
 - [x] **REDESENHAR-03**: Painel mostra um comparador visual antes/depois (site antigo vs. página gerada)
 - [x] **REDESENHAR-04**: Fotos/logo usados no redesign vêm preferencialmente do próprio negócio (Places Photos) ou de um fallback genérico (ex: monograma) — nunca de terceiro sem checagem de origem
+- [ ] **REDESENHAR-05** (Phase 02.1, INSERTED): Logo, paleta de cores e fotos do redesign são extraídos do site original do lead quando disponível, antes de cair no fallback de Places Photos/template neutro — corrige o gap de qualidade visual identificado após o lançamento da Fase 2
 
 ### Editor
 
@@ -87,6 +88,7 @@ Preenchido durante a criação do roadmap.
 | REDESENHAR-02 | Phase 2 | Complete |
 | REDESENHAR-03 | Phase 2 | Complete |
 | REDESENHAR-04 | Phase 2 | Complete |
+| REDESENHAR-05 | Phase 02.1 | Pending |
 | EDITOR-01 | Phase 3 | Complete |
 | EDITOR-02 | Phase 3 | Complete |
 | PUBLICAR-01 | Phase 4 | Complete |
