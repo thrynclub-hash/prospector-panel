@@ -25,7 +25,6 @@ export async function POST(request: Request) {
   const { data: linkData, error: linkError } = await admin.auth.admin.generateLink({
     type: "magiclink",
     email: normalizedEmail,
-    options: { redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/painel` },
   });
 
   if (linkError || !linkData) {
@@ -33,8 +32,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "internal" }, { status: 500 });
   }
 
+  // Link próprio (token_hash) em vez de linkData.properties.action_link -- o action_link
+  // aponta pro /verify do Supabase, que usa o fluxo implicit (token na URL como fragmento)
+  // e o nosso /auth/callback, sendo servidor, nunca consegue ler esse fragmento.
+  const magicLink = `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?token_hash=${linkData.properties.hashed_token}&type=magiclink&next=/painel`;
+
   try {
-    await sendMagicLinkEmail({ to: normalizedEmail, magicLink: linkData.properties.action_link });
+    await sendMagicLinkEmail({ to: normalizedEmail, magicLink });
   } catch (emailError) {
     console.error("send-login-link: e-mail falhou", emailError);
     return NextResponse.json({ ok: false, error: "email_failed" }, { status: 502 });

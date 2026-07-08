@@ -88,7 +88,6 @@ export async function POST(request: Request) {
     const { data: linkData, error: linkError } = await admin.auth.admin.generateLink({
       type: "magiclink",
       email,
-      options: { redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/painel` },
     });
 
     if (linkError || !linkData) {
@@ -96,8 +95,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true, warning: "account_created_but_link_failed" });
     }
 
+    // Link próprio (token_hash) em vez de linkData.properties.action_link -- ver
+    // comentário equivalente em app/api/send-login-link/route.ts.
+    const magicLink = `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?token_hash=${linkData.properties.hashed_token}&type=magiclink&next=/painel`;
+
     try {
-      await sendMagicLinkEmail({ to: email, magicLink: linkData.properties.action_link });
+      await sendMagicLinkEmail({ to: email, magicLink });
     } catch (emailError) {
       console.error("Kiwify webhook: e-mail falhou (conta já criada)", emailError);
     }
