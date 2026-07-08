@@ -12,7 +12,7 @@ const THEME_COLOR_RE = /<meta[^>]+name=["']theme-color["'][^>]*content=["']([^"'
 
 const IGNORED_FILENAME_PATTERNS = ["icon", "sprite", "favicon", "logo", "pixel", "1x1", "spacer", "avatar"];
 const MIN_DIMENSION = 150;
-const MAX_PHOTOS = 3;
+const MAX_PHOTOS = 8;
 
 function isLikelyContentImage(imgTag: string, src: string): boolean {
   if (src.startsWith("data:")) return false;
