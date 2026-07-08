@@ -5,15 +5,15 @@
 See: .planning/PROJECT.md (updated 2026-07-07)
 
 **Core value:** O assinante acha um negócio local com site ruim, gera um redesign com comparador antes/depois, e manda uma proposta pronta — tudo dentro do painel.
-**Current focus:** Milestone v1.0 completo (7 fases) + Fase 02.1 (gap visual) completa. Próximo: testar em produção (deploy pendente) e finalizar testes manuais da Fase 5.
+**Current focus:** Milestone v1.0 completo (7 fases) + Fase 02.1 (gap visual) completa + Fase 02.2 wave 1 (dados: horário + cap de fotos) completa. Próximo: 02.2-02 (estrutura da página + editor inline), depois testar em produção (deploy pendente) e finalizar testes manuais da Fase 5.
 
 ## Current Position
 
-Phase: 8 fases completas (Fundação, Buscar, Redesenhar, [02.1 INSERTED], Editor, Publicar, Proposta, Preços)
-Status: Milestone v1.0 100% implementado. Fase 02.1 (reusar logo/paleta/fotos do site original) implementada e verificada no código (`human_needed` — falta testar em produção com um lead real). Fase 5 (Proposta) também `human_needed`: WhatsApp confirmado funcionando de ponta a ponta em produção, confirmação em dois cliques do e-mail confirmada; ainda faltam testar envio real via Resend, supressão bloqueando reenvio, opt-out, e cross-subscriber (ver `05-proposta/05-VERIFICATION.md`).
-Last activity: 2026-07-08 — Fase 02.1 completa: `theme` (cor de marca) como chave-irmã do schema, logo via Microlink `meta=true` (mesma chamada do screenshot), fotos+theme-color via novo `lib/site-scrape.ts`, tudo non-blocking (roda fora do try/catch de erro da geração), fotos do site original preferidas às do Places quando disponíveis. Ver `02.1-01-SUMMARY.md` e `02.1-VERIFICATION.md`. **Ainda não deployado** — falta rodar `vercel --prod --yes` (ver nota abaixo sobre o deploy não ser automático).
+Phase: 8 fases completas (Fundação, Buscar, Redesenhar, [02.1 INSERTED], Editor, Publicar, Proposta, Preços) + Fase 02.2 (INSERTED) em andamento: wave 1/2 completa
+Status: Milestone v1.0 100% implementado. Fase 02.1 (reusar logo/paleta/fotos do site original) implementada e verificada no código (`human_needed` — falta testar em produção com um lead real). Fase 02.2 wave 1 (02.2-01: `facts.openingHours` + cap de fotos 3→8) implementada, verificada (build limpo, 4/4 tasks com verify passando) e commitada; wave 2 (02.2-02: seção localização/mapa/horário + galeria + editor inline) ainda não executada. Fase 5 (Proposta) também `human_needed`: WhatsApp confirmado funcionando de ponta a ponta em produção, confirmação em dois cliques do e-mail confirmada; ainda faltam testar envio real via Resend, supressão bloqueando reenvio, opt-out, e cross-subscriber (ver `05-proposta/05-VERIFICATION.md`).
+Last activity: 2026-07-08 — Fase 02.2-01 completa: `facts.openingHours?: string[] | null` adicionado dentro de `facts` (dado verificado, não chave-irmã); `DETAILS_FIELD_MASK` do Places Details agora inclui `regularOpeningHours`, `getDetails` pede `languageCode=pt-BR`; `generate/route.ts` popula `facts.openingHours` a partir de `details.regularOpeningHours?.weekdayDescriptions ?? null` (nunca inventado); cap de fotos subiu de 3 pra 8 simetricamente no fallback do Places e no scrape do site original (`lib/site-scrape.ts`). `PRO_TIER_FIELD_MASK`/`searchText` (busca de leads, Fase 1) intocados. Ver `02.2-01-SUMMARY.md`. **Ainda não deployado** — falta rodar `vercel --prod --yes` (ver nota abaixo sobre o deploy não ser automático).
 
-Progress: [██████████] 100% (7/7 fases do milestone v1.0) + Fase 02.1 (gap-closure inserida) completa no código, deploy pendente
+Progress: [██████████] 100% (7/7 fases do milestone v1.0) + Fase 02.1 (gap-closure inserida) completa no código, deploy pendente + Fase 02.2 (gap-closure inserida) 1/2 waves completa no código, deploy pendente
 
 ## Performance Metrics
 
@@ -42,6 +42,7 @@ Progress: [██████████] 100% (7/7 fases do milestone v1.0) + 
 
 ### Decisions
 
+- **Fase 02.2-01**: `facts.openingHours` usa `regularOpeningHours.weekdayDescriptions` (strings pré-formatadas/localizadas pelo Google) em vez de `regularOpeningHours.periods` (estrutura bruta) -- evita reimplementar formatação de dia-da-semana em português. Confirmado (WebSearch factual, não pesquisa formal) que o campo já está na mesma SKU Enterprise que `internationalPhoneNumber`/`rating`/`userRatingCount`/`websiteUri` (já pedidos desde a Fase 5) -- não muda o tier de billing do `getDetails`. Cap de fotos (3→8) subiu nos dois caminhos (Places fallback + site-scrape) no mesmo plano, de propósito, pra não criar assimetria entre fonte preferida e fallback.
 - **Fase 02.1**: Cor de marca (`theme.primaryColor`) entra como chave-irmã de nível superior em `RedesignContent`, nunca aninhada em `photos` — o PATCH do Editor faz `photos: body.photos ?? currentContent.photos` (substituição integral) e `editor-form.tsx` sempre manda um `photos` reconstruído à mão, então qualquer chave nova dentro de `photos` seria apagada no primeiro "Salvar edição". `theme` segue o mesmo padrão read-only já usado por `facts`.
 - **Fase 02.1**: Logo extraído reaproveitando a MESMA chamada Microlink que já existia pro screenshot "antes" (`&meta=true`) — zero novo round-trip HTTP, zero nova integração. Fotos/theme-color via novo scrape leve (`lib/site-scrape.ts`, fetch+regex, mesmo padrão de `lib/email-scrape.ts`). Fallback de cor via `sharp`/dominant-color-do-logo foi deliberadamente **deferido** (não implementado) — só `<meta theme-color>` no v1.
 - **Fase 6**: Sem script de venda ou tratamento de objeções na tela de preço — só os dois valores do requirement (PRECO-01) + uma frase de contexto. Conteúdo além disso violaria AGENT-INTEGRITY (zero invenção sem fonte).
@@ -83,15 +84,13 @@ Nenhum ainda.
 ## Session Continuity
 
 Last session: 2026-07-08
-Stopped at: Fase 02.1 (cor/logo/fotos) deployada e testada em produção pelo usuário — funcionou parcialmente (pegou fotos, mas resultado ainda "horrível" pro padrão de site de R$10k). Causa raiz identificada: a Fase 02.1 só resolveu cor/logo/foto, mas a ESTRUTURA da página (hero sem CTA, sem seção de localização/mapa/horário, Editor não-inline) nunca implementou a skill `redesign-premium` por completo. Usuário pediu explicitamente pra parar de pesquisar/discutir e só implementar direto, igual ao plugin original.
+Stopped at: Fase 02.2-01 (wave 1: dados) executada e commitada — `facts.openingHours` populado a partir do Places (nunca inventado) e cap de fotos 3→8 simétrico. Build limpo (`npm run build`), 4/4 tasks com `<verify>` passando, `SUMMARY.md` criado, `ROADMAP.md`/`STATE.md` atualizados. Nenhuma migration nova (campo aditivo dentro do jsonb `redesigns.content`, mesmo padrão de `theme` na Fase 02.1).
 
-**Fase 02.2 inserida e com CONTEXT.md já escrito** (`.planning/phases/02.2-.../02.2-CONTEXT.md`) combinando: (1) elevar estrutura da página gerada ao padrão completo da skill `redesign-premium` (CTAs, seção localização/mapa/horário, mais fotos, tipografia Playfair Display+Inter via ui-ux-pro-max) e (2) trocar o Editor pra edição inline (clicar-editar texto/imagem direto no preview, estilo do plugin original, adaptado pra React/PATCH já existente em vez do script de injeção HTML do plugin).
-
-**Sessão pausada por limite de contexto ANTES de planejar/executar.** Próximo passo direto (sem discuss-phase, pesquisa já dispensada pelo usuário):
+**Próximo passo direto:** executar 02.2-02 (`.planning/phases/02.2-redesign-estrutura-editor-inline/02.2-02-PLAN.md`, já escrito na mesma sessão de planejamento) — depende de 02.2-01 (este plano) pra consumir `facts.openingHours` e até 8 fotos na seção de localização/mapa/horário, galeria, e editor inline:
 ```
-/gsd:plan-phase 02.2 --skip-research
+/gsd:execute-phase 02.2
 ```
-Depois: `/gsd:execute-phase 02.2`, depois `vercel --prod --yes` (deploy não é automático nesse projeto, ver Blockers).
+Depois: `vercel --prod --yes` (deploy não é automático nesse projeto, ver Blockers) pra colocar wave 1 + wave 2 juntas em produção.
 
-Pendências que continuam de antes (não mudaram): testes manuais da Fase 5 (envio real/supressão/opt-out/cross-subscriber).
-Resume file: .planning/phases/02.2-redesign-estrutura-editor-inline/02.2-CONTEXT.md
+Pendências que continuam de antes (não mudaram): testes manuais da Fase 5 (envio real/supressão/opt-out/cross-subscriber); Fase 02.1 ainda sem teste real em produção pós-deploy.
+Resume file: .planning/phases/02.2-redesign-estrutura-editor-inline/02.2-02-PLAN.md
