@@ -106,10 +106,15 @@ Plans:
   2. Existe um botão/link que abre o WhatsApp com o texto pré-preenchido (`wa.me`)
   3. Existe um botão que dispara o e-mail automaticamente via Resend
   4. Um negócio que já recebeu e-mail automático (de qualquer assinante) não recebe de novo
-**Plans**: TBD
+**Plans**: 6 plans em 3 waves (planejado em `/gsd:plan-phase 5`)
 
 Plans:
-- [ ] 05-01: Geração de texto (WhatsApp + e-mail) + lista de supressão + envio via Resend
+- [ ] 05-01 (wave 1): Pré-requisito -- popular `content.facts.phone` (field mask do Places + generate route), hoje sempre `null`
+- [ ] 05-02 (wave 1): Migration `proposals` + `contacted_businesses` (lista de supressão cross-subscriber)
+- [ ] 05-03 (wave 1): `detectSiteProblems()` (função pura) + `generateProposalCopy()` (IA, gera e-mail+WhatsApp numa chamada)
+- [ ] 05-04 (wave 2, depende de 05-02/05-03): Rota `POST`/`PATCH` `/api/redesigns/[id]/proposal` (gera+persiste idempotente, gated por `is_public`; edita antes de enviar)
+- [ ] 05-05 (wave 2, depende de 05-02): Envio via Resend (`lib/email/proposal.ts` + rota `/proposal/send`) com checagem de supressão + rota pública `/unsubscribe/[token]`
+- [ ] 05-06 (wave 3, depende de 05-01/05-04/05-05): UI -- `proposal-section.tsx` + `whatsapp-link.ts`, wired em `redesenhar/page.tsx`
 
 ### Phase 6: Tabela de Preço
 **Goal**: Assinante sabe quanto cobrar do cliente final.
