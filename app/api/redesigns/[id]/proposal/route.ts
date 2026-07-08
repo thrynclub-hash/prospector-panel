@@ -91,3 +91,38 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
   return NextResponse.json({ proposal }, { status: 201 });
 }
+
+// Edição antes de enviar (CONTEXT.md: "editável... textarea simples...
+// mesmo padrão do Editor da Fase 3").
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const guard = await requireActiveUser();
+  if ("error" in guard) return guard.error;
+  const { supabase, user } = guard;
+
+  const { id } = await params;
+  const body = (await request.json().catch(() => ({}))) as {
+    emailSubject?: string;
+    emailBody?: string;
+    whatsappText?: string;
+  };
+
+  const { data: proposal, error } = await supabase
+    .from("proposals")
+    .update({
+      ...(body.emailSubject !== undefined && { email_subject: body.emailSubject }),
+      ...(body.emailBody !== undefined && { email_body: body.emailBody }),
+      ...(body.whatsappText !== undefined && { whatsapp_text: body.whatsappText }),
+      updated_at: new Date().toISOString(),
+    })
+    .eq("redesign_id", id)
+    .eq("user_id", user.id)
+    .select("id, email_subject, email_body, whatsapp_text, email_sent_at")
+    .single();
+
+  if (error) {
+    console.error("redesigns/proposal PATCH: erro atualizando", error);
+    return NextResponse.json({ error: "Erro salvando edição" }, { status: 500 });
+  }
+
+  return NextResponse.json({ proposal });
+}
