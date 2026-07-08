@@ -5,7 +5,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { RedesignContent } from "@/types/redesign-content";
 import { RedesignPreview } from "../redesign-preview";
 
-// Fase 02.2: substitui o formulário (editor-form.tsx, Fase 3) pela edição
+// Fase 02.2: substitui o formulário separado da Fase 3 pela edição
 // inline direto no preview real -- clicar em texto edita no lugar, clicar em
 // imagem troca via upload; cada edição salva sozinha (sem botão "Salvar
 // edição" -- ver RedesignPreview/editable-field.tsx). A rota/entrada
