@@ -72,11 +72,11 @@ Nenhuma -- plano original do ROADMAP (`04-01: Rota pública isolada + slug + avi
 
 ## Issues Encountered
 
-- **Nova migration (`20260708140000_public_redesigns.sql`) ainda não aplicada no banco real** -- mesmo bloqueio de MCP das fases anteriores. Sem ela, `/demo/[slug]` sempre retorna 404 mesmo pra um redesign publicado (a view `public_redesigns` não existe ainda).
+- Migration `20260708140000_public_redesigns.sql` foi aplicada no banco real pelo usuário via SQL Editor após o fim da fase (view + policies confirmadas com sucesso) -- `/demo/[slug]` já pode ser testado de verdade.
 
 ## User Setup Required
 
-- Aplicar `supabase/migrations/20260708140000_public_redesigns.sql` no Supabase real (SQL Editor, mesmo processo das duas migrations anteriores).
+Nenhum -- migration aplicada.
 
 ## Next Phase Readiness
 

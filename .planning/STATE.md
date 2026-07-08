@@ -9,10 +9,10 @@ See: .planning/PROJECT.md (updated 2026-07-07)
 
 ## Current Position
 
-Phase: 5 of 7 (Proposta) — não iniciada
+Phase: 5 of 7 (Proposta) — contexto reunido (05-CONTEXT.md), planejamento ainda não iniciado
 Plan: 1 of 1 completo na Fase 4
-Status: Fases 1-4 implementadas e rodando localmente (build limpo); 3 migrations pendentes de aplicar no banco real (2 já aplicadas pelo usuário, 1 nova da Fase 4 ainda não)
-Last activity: 2026-07-08 — Fase 4 (Publicar) completa: rota pública `/demo/[slug]` isolada, RLS em 2 camadas, slug nanoid, banner de aviso, noindex duplo. Ver `04-publicar/04-01-SUMMARY.md`.
+Status: Fases 1-4 implementadas, rodando localmente e em produção; as 3 migrations (`leads_and_usage`, `redesigns`, `public_redesigns`) já foram aplicadas no banco real pelo usuário
+Last activity: 2026-07-08 — Fase 4 (Publicar) completa: rota pública `/demo/[slug]` isolada, RLS em 2 camadas, slug nanoid, banner de aviso, noindex duplo. Ver `04-publicar/04-01-SUMMARY.md`. Migration `20260708140000_public_redesigns.sql` aplicada no banco real (view + policies confirmadas com sucesso) e push feito pro remoto.
 
 Progress: [██████░░░░] ~71% (5/7 fases)
 
@@ -60,9 +60,10 @@ Decisões completas em PROJECT.md (seção Key Decisions). Recentes:
 
 Nenhum ainda.
 
+**Ideia adiada (backlog, fora do escopo da Fase 5):** distinguir "criar site" (leads sem site próprio) de "redesenhar" (leads com site ruim existente) — rótulo/fluxo diferente desde a Fase 2, possivelmente faixa de preço própria na Fase 6. Levantado pelo usuário em 2026-07-08, ver `05-proposta/05-CONTEXT.md` seção Deferred Ideas.
+
 ### Blockers/Concerns
 
-- **Nova migration não aplicada no banco real**: `20260708140000_public_redesigns.sql` (view `public_redesigns` + RLS pública). As duas anteriores (`leads_and_usage`, `redesigns`) já foram aplicadas pelo usuário com sucesso. MCP do Supabase desta sessão continua sem acesso ao projeto real (`bhiggyigsrqfabqhutne`) — aplicar via SQL Editor do dashboard.
 - `AI_GATEWAY_API_KEY` já configurada e funcionando em produção (1 geração real confirmada).
 - **Schema do Places precisa seguir os termos de uso** (só `place_id` cacheável indefinidamente) — resolvido no design da Phase 1 (BUSCA-04), mas é a decisão mais fácil de errar por acidente se alguém "simplificar" o schema depois. Ver `.planning/research/PITFALLS.md` Pitfall 1. `ARCHITECTURE.md` ainda tem o schema desatualizado (com campos brutos permanentes) — vale corrigir esse arquivo numa próxima sessão pra não confundir.
 - **`redesigns.content` (schema jsonb) é decisão que trava 3 fases** (Redesenhar escreve, Editor edita, Publicar renderiza) — precisa ser congelado na Phase 2, antes de começar Phase 3/4.
@@ -72,5 +73,5 @@ Nenhum ainda.
 ## Session Continuity
 
 Last session: 2026-07-08
-Stopped at: Fases 1-4 implementadas e testadas localmente (build de produção limpo, deployado em produção). Falta aplicar a migration `20260708140000_public_redesigns.sql` no banco real antes de testar publicação de verdade. Sessão pausada por limite de contexto antes de iniciar a Fase 5 (Proposta). Gap de qualidade visual do redesign (logo/paleta do site original) continua em aberto, combinado de voltar nisso.
-Resume file: .planning/phases/04-publicar/04-01-SUMMARY.md
+Stopped at: Fases 1-4 implementadas, testadas localmente e deployadas em produção; todas as 3 migrations aplicadas no banco real (última confirmada nesta sessão, push feito). Contexto da Fase 5 (Proposta) reunido via /gsd:discuss-phase — decisões sobre tom/conteúdo da proposta, fluxo WhatsApp/e-mail, lista de supressão (chave place_id) e onde a tela vive no painel. Próximo passo: /gsd:plan-phase 5. Gap de qualidade visual do redesign (logo/paleta do site original) continua em aberto, combinado de voltar nisso.
+Resume file: .planning/phases/05-proposta/05-CONTEXT.md

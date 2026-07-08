@@ -47,7 +47,7 @@ Plans:
 Plans:
 - [x] 01-01: Integração Places API (searchText + Place Details) + PageSpeed + scrape de e-mail + schema `leads`/`usage_events` compatível com ToS + rotas de API + UI de busca/lista/quota (implementado como uma unidade, sem separação backend/UI — ver `01-01-SUMMARY.md`)
 
-**Pendência conhecida:** migration `20260708120000_leads_and_usage.sql` ainda não foi aplicada no banco real (`bhiggyigsrqfabqhutne`) — o MCP do Supabase disponível nesta sessão não tem acesso a esse projeto (só enxerga PhotoForge e leonardo-ecossistema). Precisa ser aplicada manualmente (SQL editor do Supabase, ou `supabase link --project-ref bhiggyigsrqfabqhutne && supabase db push`) antes de testar a feature com sessão real.
+Migration `20260708120000_leads_and_usage.sql` aplicada no banco real pelo usuário.
 
 ### Phase 2: Redesenhar
 **Goal**: Assinante gera uma versão redesenhada por IA de um lead, com comparador antes/depois, sem inventar fatos sobre o negócio.
@@ -65,7 +65,7 @@ Plans:
 - [x] 02-01: Schema `redesigns.content` (jsonb, campos fato vs. gerado) + geração via AI Gateway (Gemini Flash) + Places Photos re-hospedadas + screenshot "antes" (Microlink) + comparador visual (`react-compare-slider`) — implementado como uma unidade, sem separação em dois planos. Ver `02-01-SUMMARY.md`.
 
 **Pendências conhecidas:**
-- Migration `20260708130000_redesigns.sql` também não aplicada no banco real (mesmo bloqueio da Fase 1 — MCP do Supabase sem acesso a `bhiggyigsrqfabqhutne`).
+- Migration `20260708130000_redesigns.sql` aplicada no banco real pelo usuário.
 - `AI_GATEWAY_API_KEY` não configurada em `.env.local` — geração não roda localmente até essa chave existir (em produção na Vercel funciona via OIDC automático, sem variável extra).
 - Sem scrape de paleta/logo do site original do lead — o preview usa template neutro + fotos do Places, não a paleta real do negócio (fora do escopo desta fase; ver nota em `redesign-preview.tsx`).
 
@@ -131,9 +131,9 @@ Fases executam em ordem numérica: 0 → 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|-----------------|--------|-----------|
 | 0. Fundação | 1/1 | Complete | 2026-07-08 |
-| 1. Buscar | 1/1 | Complete (migration pendente de aplicar) | 2026-07-08 |
-| 2. Redesenhar | 1/1 | Complete (migration + AI_GATEWAY_API_KEY pendentes) | 2026-07-08 |
+| 1. Buscar | 1/1 | Complete | 2026-07-08 |
+| 2. Redesenhar | 1/1 | Complete | 2026-07-08 |
 | 3. Editor | 1/1 | Complete | 2026-07-08 |
-| 4. Publicar | 1/1 | Complete (migration pendente de aplicar) | 2026-07-08 |
+| 4. Publicar | 1/1 | Complete | 2026-07-08 |
 | 5. Proposta | 0/1 | Not started | - |
 | 6. Tabela de Preço | 0/1 | Not started | - |
