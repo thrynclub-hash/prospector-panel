@@ -11,7 +11,7 @@ O painel hoje só tem o esqueleto de assinatura (Kiwify + Supabase Auth + `/pain
 - Fases decimais (2.1, 2.2): inserções urgentes (marcadas com INSERTED)
 
 - [x] **Phase 0: Fundação** - Guard de auth+assinatura compartilhado no `/painel` + migrations versionadas do Supabase
-- [ ] **Phase 1: Buscar** - Busca de leads via Google Maps, compatível com os termos do Places, com limite de uso
+- [x] **Phase 1: Buscar** - Busca de leads via Google Maps, compatível com os termos do Places, com limite de uso
 - [ ] **Phase 2: Redesenhar** - Geração de landing page por IA + comparador antes/depois, com separação fato/gerado
 - [ ] **Phase 3: Editor** - Edição de texto/imagem da página gerada, com sinalização de campos de IA
 - [ ] **Phase 4: Publicar** - URL pública de demo com aviso, noindex e slug não-adivinhável
@@ -42,11 +42,12 @@ Plans:
   2. Resultados mostram se o negócio não tem site, ou tem site com PageSpeed baixo, e se há e-mail público
   3. Leads salvos aparecem numa lista revisável depois, sem que o painel tenha guardado dados do Places além do `place_id` permanentemente
   4. Assinante vê quantas buscas já usou hoje e é bloqueado ao atingir o limite
-**Plans**: TBD
+**Plans**: 1/1 plan executado — Phase COMPLETE (2026-07-08)
 
 Plans:
-- [ ] 01-01: Integração Places API (busca + PageSpeed) + schema compatível com ToS (`leads` place_id-first)
-- [ ] 01-02: UI de busca + lista de leads + guardrail de quota
+- [x] 01-01: Integração Places API (searchText + Place Details) + PageSpeed + scrape de e-mail + schema `leads`/`usage_events` compatível com ToS + rotas de API + UI de busca/lista/quota (implementado como uma unidade, sem separação backend/UI — ver `01-01-SUMMARY.md`)
+
+**Pendência conhecida:** migration `20260708120000_leads_and_usage.sql` ainda não foi aplicada no banco real (`bhiggyigsrqfabqhutne`) — o MCP do Supabase disponível nesta sessão não tem acesso a esse projeto (só enxerga PhotoForge e leonardo-ecossistema). Precisa ser aplicada manualmente (SQL editor do Supabase, ou `supabase link --project-ref bhiggyigsrqfabqhutne && supabase db push`) antes de testar a feature com sessão real.
 
 ### Phase 2: Redesenhar
 **Goal**: Assinante gera uma versão redesenhada por IA de um lead, com comparador antes/depois, sem inventar fatos sobre o negócio.
@@ -124,7 +125,7 @@ Fases executam em ordem numérica: 0 → 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|-----------------|--------|-----------|
 | 0. Fundação | 1/1 | Complete | 2026-07-08 |
-| 1. Buscar | 0/2 | Not started | - |
+| 1. Buscar | 1/1 | Complete (migration pendente de aplicar) | 2026-07-08 |
 | 2. Redesenhar | 0/2 | Not started | - |
 | 3. Editor | 0/1 | Not started | - |
 | 4. Publicar | 0/1 | Not started | - |

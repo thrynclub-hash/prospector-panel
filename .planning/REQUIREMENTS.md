@@ -15,10 +15,10 @@
 
 ### Buscar
 
-- [ ] **BUSCA-01**: Assinante busca negócios locais por localização/categoria via Google Maps
-- [ ] **BUSCA-02**: Resultados são filtrados por nota ≥ 4.7
-- [ ] **BUSCA-03**: Resultados sinalizam "site ruim" (sem site próprio, ou site com nota baixa no PageSpeed) e presença de e-mail público
-- [ ] **BUSCA-04**: Leads salvos ficam numa lista revisável pelo assinante; o `place_id` é a única chave persistida indefinidamente — nome/telefone/nota/horário são re-buscados ou expiram, nunca armazenados como cache permanente (exigência dos termos do Google Places API)
+- [x] **BUSCA-01**: Assinante busca negócios locais por localização/categoria via Google Maps
+- [x] **BUSCA-02**: Resultados são filtrados por nota ≥ 4.7
+- [x] **BUSCA-03**: Resultados sinalizam "site ruim" (sem site próprio, ou site com nota baixa no PageSpeed) e presença de e-mail público
+- [x] **BUSCA-04**: Leads salvos ficam numa lista revisável pelo assinante; o `place_id` é a única chave persistida indefinidamente — nome/telefone/nota/horário são re-buscados ou expiram, nunca armazenados como cache permanente (exigência dos termos do Google Places API)
 
 ### Redesenhar
 
@@ -78,11 +78,11 @@ Preenchido durante a criação do roadmap.
 |-------------|-------|--------|
 | FOUND-01 | Phase 0 | Complete |
 | FOUND-02 | Phase 0 | Complete |
-| FOUND-03 | Phase 1 / Phase 2 | Pending |
-| BUSCA-01 | Phase 1 | Pending |
-| BUSCA-02 | Phase 1 | Pending |
-| BUSCA-03 | Phase 1 | Pending |
-| BUSCA-04 | Phase 1 | Pending |
+| FOUND-03 | Phase 1 / Phase 2 | Phase 1 half complete (search quota) |
+| BUSCA-01 | Phase 1 | Complete |
+| BUSCA-02 | Phase 1 | Complete |
+| BUSCA-03 | Phase 1 | Complete |
+| BUSCA-04 | Phase 1 | Complete |
 | REDESENHAR-01 | Phase 2 | Pending |
 | REDESENHAR-02 | Phase 2 | Pending |
 | REDESENHAR-03 | Phase 2 | Pending |

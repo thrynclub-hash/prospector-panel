@@ -1,4 +1,5 @@
-import { Target } from "lucide-react";
+import Link from "next/link";
+import { Target, Search, ArrowRight } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function PainelPage() {
@@ -21,8 +22,24 @@ export default async function PainelPage() {
           você vai poder buscar leads, gerar propostas e enviar tudo por aqui.
         </p>
 
+        <Link
+          href="/painel/buscar"
+          className="flex items-center justify-between gap-4 bg-card border border-border rounded-2xl p-6 hover:border-accent transition-colors mb-4"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-accent/10 text-accent-dim flex items-center justify-center shrink-0">
+              <Search size={18} />
+            </div>
+            <div>
+              <p className="font-display font-bold text-ink">Buscar</p>
+              <p className="text-muted text-sm">Encontre negócios locais com site ruim</p>
+            </div>
+          </div>
+          <ArrowRight size={18} className="text-muted shrink-0" />
+        </Link>
+
         <div className="bg-card border border-border rounded-2xl p-8">
-          <p className="text-muted text-sm">🚧 Próximas seções: Prospectar, Redesenhar, Editor, Publicar, Proposta.</p>
+          <p className="text-muted text-sm">🚧 Próximas seções: Redesenhar, Editor, Publicar, Proposta.</p>
         </div>
       </div>
     </main>
