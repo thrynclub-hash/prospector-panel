@@ -13,6 +13,7 @@
     "@supabase/supabase-js": "^2.110.1",
     "ai": "^7.0.17",
     "lucide-react": "^1.23.0",
+    "nanoid": "^5.1.16",
     "next": "16.2.10",
     "react": "19.2.4",
     "react-compare-slider": "^4.0.0",

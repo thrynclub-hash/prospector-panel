@@ -14,7 +14,7 @@ O painel hoje só tem o esqueleto de assinatura (Kiwify + Supabase Auth + `/pain
 - [x] **Phase 1: Buscar** - Busca de leads via Google Maps, compatível com os termos do Places, com limite de uso
 - [x] **Phase 2: Redesenhar** - Geração de landing page por IA + comparador antes/depois, com separação fato/gerado
 - [x] **Phase 3: Editor** - Edição de texto/imagem da página gerada, com sinalização de campos de IA
-- [ ] **Phase 4: Publicar** - URL pública de demo com aviso, noindex e slug não-adivinhável
+- [x] **Phase 4: Publicar** - URL pública de demo com aviso, noindex e slug não-adivinhável
 - [ ] **Phase 5: Proposta** - Mensagem de proposta (WhatsApp copiar/colar + e-mail automático) com lista de supressão
 - [ ] **Phase 6: Tabela de Preço** - Tela estática com faixa de preço sugerido pro assinante revender
 
@@ -92,10 +92,10 @@ Plans:
   2. A página pública mostra um aviso visível de que é uma demonstração não-oficial
   3. A página pública não é indexada por buscadores (testável via `robots.txt`/meta)
   4. A URL não usa o nome do negócio nem um ID sequencial — é um slug não-adivinhável
-**Plans**: TBD
+**Plans**: 1/1 plan executado — Phase COMPLETE (2026-07-08)
 
 Plans:
-- [ ] 04-01: Rota pública `app/demo/[slug]` isolada (client anon-key + view restrita) + slug + aviso + noindex
+- [x] 04-01: Rota pública `app/demo/[slug]` isolada (client anon-key + view `public_redesigns` com `security_invoker`) + slug via `nanoid(12)` + banner de aviso persistente + `noindex` (meta + robots.txt) + publicar/despublicar no painel. Ver `04-01-SUMMARY.md`.
 
 ### Phase 5: Proposta
 **Goal**: Assinante recebe um texto de proposta pronto, citando os problemas reais do site antigo, sem risco de reincidir em spam.
@@ -134,6 +134,6 @@ Fases executam em ordem numérica: 0 → 1 → 2 → 3 → 4 → 5 → 6
 | 1. Buscar | 1/1 | Complete (migration pendente de aplicar) | 2026-07-08 |
 | 2. Redesenhar | 1/1 | Complete (migration + AI_GATEWAY_API_KEY pendentes) | 2026-07-08 |
 | 3. Editor | 1/1 | Complete | 2026-07-08 |
-| 4. Publicar | 0/1 | Not started | - |
+| 4. Publicar | 1/1 | Complete (migration pendente de aplicar) | 2026-07-08 |
 | 5. Proposta | 0/1 | Not started | - |
 | 6. Tabela de Preço | 0/1 | Not started | - |

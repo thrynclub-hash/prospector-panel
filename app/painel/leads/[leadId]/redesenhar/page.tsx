@@ -7,6 +7,7 @@ import type { RedesignContent } from "@/types/redesign-content";
 import { GenerateButton } from "./generate-button";
 import { Comparator } from "./comparator";
 import { DeleteRedesignButton } from "./delete-redesign-button";
+import { PublishButton } from "./publish-button";
 
 export default async function RedesenharPage({ params }: { params: Promise<{ leadId: string }> }) {
   const { leadId } = await params;
@@ -34,7 +35,7 @@ export default async function RedesenharPage({ params }: { params: Promise<{ lea
     checkQuota(supabase, user.id, "redesign_generate"),
     supabase
       .from("redesigns")
-      .select("id, content, before_screenshot_url, created_at")
+      .select("id, content, before_screenshot_url, created_at, is_public, public_slug")
       .eq("lead_id", leadId)
       .order("created_at", { ascending: false })
       .limit(1)
@@ -93,6 +94,9 @@ export default async function RedesenharPage({ params }: { params: Promise<{ lea
             </p>
 
             <Comparator beforeUrl={redesign.before_screenshot_url} content={redesign.content as RedesignContent} />
+
+            <div className="pt-2 border-t border-border" />
+            <PublishButton redesignId={redesign.id} initialIsPublic={redesign.is_public} initialSlug={redesign.public_slug} />
 
             <div className="flex items-center gap-3 flex-wrap">
               <GenerateButton leadId={leadId} disabled={quota.used >= quota.limit} />

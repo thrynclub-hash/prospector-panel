@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-07-07)
 
 **Core value:** O assinante acha um negócio local com site ruim, gera um redesign com comparador antes/depois, e manda uma proposta pronta — tudo dentro do painel.
-**Current focus:** Phase 4 (Publicar)
+**Current focus:** Phase 5 (Proposta)
 
 ## Current Position
 
-Phase: 4 of 7 (Publicar) — não iniciada
-Plan: 1 of 1 completo na Fase 3
-Status: Fases 1, 2 e 3 implementadas e rodando localmente (build limpo); migrations pendentes de aplicar no banco real, AI_GATEWAY_API_KEY pendente de propagar totalmente
-Last activity: 2026-07-08 — Fase 3 (Editor) completa: edição de texto/foto do redesign com sinalização "gerado por IA", excluir lead/redesign, comparação lado a lado em tela cheia. Ver `03-editor/03-01-SUMMARY.md`.
+Phase: 5 of 7 (Proposta) — não iniciada
+Plan: 1 of 1 completo na Fase 4
+Status: Fases 1-4 implementadas e rodando localmente (build limpo); 3 migrations pendentes de aplicar no banco real (2 já aplicadas pelo usuário, 1 nova da Fase 4 ainda não)
+Last activity: 2026-07-08 — Fase 4 (Publicar) completa: rota pública `/demo/[slug]` isolada, RLS em 2 camadas, slug nanoid, banner de aviso, noindex duplo. Ver `04-publicar/04-01-SUMMARY.md`.
 
-Progress: [█████░░░░░] ~57% (4/7 fases)
+Progress: [██████░░░░] ~71% (5/7 fases)
 
 ## Performance Metrics
 
@@ -39,6 +39,8 @@ Progress: [█████░░░░░] ~57% (4/7 fases)
 
 ### Decisions
 
+- **Fase 4**: RLS pública em 2 camadas (view `public_redesigns` com `security_invoker=true` + policy direta na tabela `redesigns` pro papel `anon`) — nunca confiar só na view.
+- **Fase 4**: Rota pública (`app/demo/[slug]`) só usa `lib/supabase/public.ts` (anon key, sem cookies) — nunca o client de sessão nem o admin.
 - **Fase 3**: `content.facts` nunca é editável no Editor (só `generated`/`photos`) — a rota PATCH ignora qualquer coisa que o cliente mande pra `facts`, reconstruindo sempre a partir do valor já salvo.
 - **Fase 3**: Editor usa inputs/textareas simples em vez de Tiptap (citado no ROADMAP original) — YAGNI, sem necessidade de rich-text pros campos atuais.
 - **Gap de qualidade visual identificado (não resolvido ainda)**: o redesign gerado não reusa logo/paleta/fotos do SITE ORIGINAL do lead (só fotos do Google Places) — comparado lado a lado com um site original já bem feito, o redesign atual pode parecer pior visualmente, mesmo tendo conteúdo correto. Corrigir isso exigiria scraping do site original (logo, cores, hero) — combinado com o usuário pra voltar nisso depois da Fase 4.
@@ -60,8 +62,8 @@ Nenhum ainda.
 
 ### Blockers/Concerns
 
-- **Duas migrations não aplicadas no banco real** (`bhiggyigsrqfabqhutne`): `20260708120000_leads_and_usage.sql` e `20260708130000_redesigns.sql` — o MCP do Supabase desta sessão só enxerga PhotoForge e leonardo-ecossistema. Aplicar manualmente (SQL editor ou `supabase link`+`db push`) antes de testar com sessão real.
-- **`AI_GATEWAY_API_KEY` ausente em `.env.local`** — geração de redesign (Fase 2) não roda em `npm run dev` local sem essa variável. Pegar em vercel.com → time → AI Gateway.
+- **Nova migration não aplicada no banco real**: `20260708140000_public_redesigns.sql` (view `public_redesigns` + RLS pública). As duas anteriores (`leads_and_usage`, `redesigns`) já foram aplicadas pelo usuário com sucesso. MCP do Supabase desta sessão continua sem acesso ao projeto real (`bhiggyigsrqfabqhutne`) — aplicar via SQL Editor do dashboard.
+- `AI_GATEWAY_API_KEY` já configurada e funcionando em produção (1 geração real confirmada).
 - **Schema do Places precisa seguir os termos de uso** (só `place_id` cacheável indefinidamente) — resolvido no design da Phase 1 (BUSCA-04), mas é a decisão mais fácil de errar por acidente se alguém "simplificar" o schema depois. Ver `.planning/research/PITFALLS.md` Pitfall 1. `ARCHITECTURE.md` ainda tem o schema desatualizado (com campos brutos permanentes) — vale corrigir esse arquivo numa próxima sessão pra não confundir.
 - **`redesigns.content` (schema jsonb) é decisão que trava 3 fases** (Redesenhar escreve, Editor edita, Publicar renderiza) — precisa ser congelado na Phase 2, antes de começar Phase 3/4.
 - Sem revisão jurídica formal do LGPD/Places ToS — pesquisa é grounded em fontes públicas mas não substitui parecer legal antes do lançamento (ver `.planning/research/SUMMARY.md` "Gaps to Address").
@@ -70,5 +72,5 @@ Nenhum ainda.
 ## Session Continuity
 
 Last session: 2026-07-08
-Stopped at: Fases 1, 2 e 3 implementadas e testadas localmente (dev server + build de produção limpo). Migration real aplicada com sucesso pelo usuário; AI_GATEWAY_API_KEY configurada (1 geração real confirmada em produção). Gap de qualidade visual do redesign (logo/paleta do site original) identificado e combinado de voltar depois da Fase 4. Próximo passo: `/gsd:discuss-phase 4` ou direto `/gsd:plan-phase 4` pra Publicar.
-Resume file: .planning/phases/03-editor/03-01-SUMMARY.md
+Stopped at: Fases 1-4 implementadas e testadas localmente (build de produção limpo, deployado em produção). Falta aplicar a migration `20260708140000_public_redesigns.sql` no banco real antes de testar publicação de verdade. Sessão pausada por limite de contexto antes de iniciar a Fase 5 (Proposta). Gap de qualidade visual do redesign (logo/paleta do site original) continua em aberto, combinado de voltar nisso.
+Resume file: .planning/phases/04-publicar/04-01-SUMMARY.md

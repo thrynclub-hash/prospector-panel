@@ -34,10 +34,10 @@
 
 ### Publicar
 
-- [ ] **PUBLICAR-01**: Assinante publica o redesign numa URL pública de demonstração, hospedada pelo próprio painel (sem depender da hospedagem do assinante)
-- [ ] **PUBLICAR-02**: Toda página pública tem aviso visível de que é uma demonstração não-oficial, não afiliada ao negócio real
-- [ ] **PUBLICAR-03**: Páginas públicas não são indexadas por buscadores (`noindex` + `robots.txt`)
-- [ ] **PUBLICAR-04**: A URL pública usa um identificador não-sequencial e não-adivinhável (não o nome do negócio nem um ID incremental)
+- [x] **PUBLICAR-01**: Assinante publica o redesign numa URL pública de demonstração, hospedada pelo próprio painel (sem depender da hospedagem do assinante)
+- [x] **PUBLICAR-02**: Toda página pública tem aviso visível de que é uma demonstração não-oficial, não afiliada ao negócio real
+- [x] **PUBLICAR-03**: Páginas públicas não são indexadas por buscadores (`noindex` + `robots.txt`)
+- [x] **PUBLICAR-04**: A URL pública usa um identificador não-sequencial e não-adivinhável (não o nome do negócio nem um ID incremental)
 
 ### Proposta
 
@@ -89,10 +89,10 @@ Preenchido durante a criação do roadmap.
 | REDESENHAR-04 | Phase 2 | Complete |
 | EDITOR-01 | Phase 3 | Complete |
 | EDITOR-02 | Phase 3 | Complete |
-| PUBLICAR-01 | Phase 4 | Pending |
-| PUBLICAR-02 | Phase 4 | Pending |
-| PUBLICAR-03 | Phase 4 | Pending |
-| PUBLICAR-04 | Phase 4 | Pending |
+| PUBLICAR-01 | Phase 4 | Complete |
+| PUBLICAR-02 | Phase 4 | Complete |
+| PUBLICAR-03 | Phase 4 | Complete |
+| PUBLICAR-04 | Phase 4 | Complete |
 | PROPOSTA-01 | Phase 5 | Pending |
 | PROPOSTA-02 | Phase 5 | Pending |
 | PROPOSTA-03 | Phase 5 | Pending |
