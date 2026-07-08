@@ -11,7 +11,7 @@
 
 - [x] **FOUND-01**: Toda página sob `/painel/*` exige sessão ativa E assinatura com `status = "active"` (guard compartilhado, corrige o gap hoje só verifica sessão)
 - [x] **FOUND-02**: Schema do Supabase (tabela existente `prospector_customers` + todas as tabelas novas deste milestone) versionado em `supabase/migrations/`
-- [ ] **FOUND-03**: Cada assinante tem um limite diário de buscas (Buscar) e de gerações de redesign (Redesenhar), aplicado no servidor e visível na UI
+- [x] **FOUND-03**: Cada assinante tem um limite diário de buscas (Buscar) e de gerações de redesign (Redesenhar), aplicado no servidor e visível na UI
 
 ### Buscar
 
@@ -22,10 +22,10 @@
 
 ### Redesenhar
 
-- [ ] **REDESENHAR-01**: Assinante gera uma landing page redesenhada por IA a partir de um lead salvo
-- [ ] **REDESENHAR-02**: O conteúdo gerado distingue campos reais/verificados (nome, endereço, telefone) de campos sugeridos pela IA (copy/marketing) — a IA nunca inventa horário de funcionamento, preço, certificação/prêmio, tempo de mercado ou depoimento de cliente
-- [ ] **REDESENHAR-03**: Painel mostra um comparador visual antes/depois (site antigo vs. página gerada)
-- [ ] **REDESENHAR-04**: Fotos/logo usados no redesign vêm preferencialmente do próprio negócio (Places Photos) ou de um fallback genérico (ex: monograma) — nunca de terceiro sem checagem de origem
+- [x] **REDESENHAR-01**: Assinante gera uma landing page redesenhada por IA a partir de um lead salvo
+- [x] **REDESENHAR-02**: O conteúdo gerado distingue campos reais/verificados (nome, endereço, telefone) de campos sugeridos pela IA (copy/marketing) — a IA nunca inventa horário de funcionamento, preço, certificação/prêmio, tempo de mercado ou depoimento de cliente
+- [x] **REDESENHAR-03**: Painel mostra um comparador visual antes/depois (site antigo vs. página gerada)
+- [x] **REDESENHAR-04**: Fotos/logo usados no redesign vêm preferencialmente do próprio negócio (Places Photos) ou de um fallback genérico (ex: monograma) — nunca de terceiro sem checagem de origem
 
 ### Editor
 
@@ -78,15 +78,15 @@ Preenchido durante a criação do roadmap.
 |-------------|-------|--------|
 | FOUND-01 | Phase 0 | Complete |
 | FOUND-02 | Phase 0 | Complete |
-| FOUND-03 | Phase 1 / Phase 2 | Phase 1 half complete (search quota) |
+| FOUND-03 | Phase 1 / Phase 2 | Complete |
 | BUSCA-01 | Phase 1 | Complete |
 | BUSCA-02 | Phase 1 | Complete |
 | BUSCA-03 | Phase 1 | Complete |
 | BUSCA-04 | Phase 1 | Complete |
-| REDESENHAR-01 | Phase 2 | Pending |
-| REDESENHAR-02 | Phase 2 | Pending |
-| REDESENHAR-03 | Phase 2 | Pending |
-| REDESENHAR-04 | Phase 2 | Pending |
+| REDESENHAR-01 | Phase 2 | Complete |
+| REDESENHAR-02 | Phase 2 | Complete |
+| REDESENHAR-03 | Phase 2 | Complete |
+| REDESENHAR-04 | Phase 2 | Complete |
 | EDITOR-01 | Phase 3 | Pending |
 | EDITOR-02 | Phase 3 | Pending |
 | PUBLICAR-01 | Phase 4 | Pending |

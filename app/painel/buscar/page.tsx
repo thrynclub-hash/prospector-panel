@@ -72,6 +72,12 @@ export default async function BuscarPage() {
                     <span className="px-2 py-1 rounded-full bg-violet/10 text-violet capitalize">{lead.status}</span>
                   </div>
                 </div>
+                <Link
+                  href={`/painel/leads/${lead.id}/redesenhar`}
+                  className="shrink-0 px-4 py-2 rounded-xl border border-border text-sm font-medium text-ink hover:border-accent hover:text-accent transition-colors"
+                >
+                  Redesenhar
+                </Link>
               </div>
             ))}
           </div>

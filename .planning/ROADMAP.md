@@ -12,7 +12,7 @@ O painel hoje só tem o esqueleto de assinatura (Kiwify + Supabase Auth + `/pain
 
 - [x] **Phase 0: Fundação** - Guard de auth+assinatura compartilhado no `/painel` + migrations versionadas do Supabase
 - [x] **Phase 1: Buscar** - Busca de leads via Google Maps, compatível com os termos do Places, com limite de uso
-- [ ] **Phase 2: Redesenhar** - Geração de landing page por IA + comparador antes/depois, com separação fato/gerado
+- [x] **Phase 2: Redesenhar** - Geração de landing page por IA + comparador antes/depois, com separação fato/gerado
 - [ ] **Phase 3: Editor** - Edição de texto/imagem da página gerada, com sinalização de campos de IA
 - [ ] **Phase 4: Publicar** - URL pública de demo com aviso, noindex e slug não-adivinhável
 - [ ] **Phase 5: Proposta** - Mensagem de proposta (WhatsApp copiar/colar + e-mail automático) com lista de supressão
@@ -59,11 +59,15 @@ Plans:
   3. Comparador mostra o site antigo (screenshot) lado a lado com o gerado
   4. Fotos/logo usados são do próprio negócio (Places Photos) ou um fallback genérico, nunca imagem de terceiro sem checagem
   5. Assinante vê quantas gerações já usou hoje e é bloqueado ao atingir o limite
-**Plans**: TBD
+**Plans**: 1/1 plan executado — Phase COMPLETE (2026-07-08)
 
 Plans:
-- [ ] 02-01: Schema `redesigns.content` (jsonb, campos fato vs. gerado) + geração via AI SDK/Gateway
-- [ ] 02-02: Captura de screenshot "antes" + comparador visual (`react-compare-slider`)
+- [x] 02-01: Schema `redesigns.content` (jsonb, campos fato vs. gerado) + geração via AI Gateway (Gemini Flash) + Places Photos re-hospedadas + screenshot "antes" (Microlink) + comparador visual (`react-compare-slider`) — implementado como uma unidade, sem separação em dois planos. Ver `02-01-SUMMARY.md`.
+
+**Pendências conhecidas:**
+- Migration `20260708130000_redesigns.sql` também não aplicada no banco real (mesmo bloqueio da Fase 1 — MCP do Supabase sem acesso a `bhiggyigsrqfabqhutne`).
+- `AI_GATEWAY_API_KEY` não configurada em `.env.local` — geração não roda localmente até essa chave existir (em produção na Vercel funciona via OIDC automático, sem variável extra).
+- Sem scrape de paleta/logo do site original do lead — o preview usa template neutro + fotos do Places, não a paleta real do negócio (fora do escopo desta fase; ver nota em `redesign-preview.tsx`).
 
 ### Phase 3: Editor
 **Goal**: Assinante ajusta o que a IA gerou antes de publicar ou enviar.
@@ -126,7 +130,7 @@ Fases executam em ordem numérica: 0 → 1 → 2 → 3 → 4 → 5 → 6
 |-------|-----------------|--------|-----------|
 | 0. Fundação | 1/1 | Complete | 2026-07-08 |
 | 1. Buscar | 1/1 | Complete (migration pendente de aplicar) | 2026-07-08 |
-| 2. Redesenhar | 0/2 | Not started | - |
+| 2. Redesenhar | 1/1 | Complete (migration + AI_GATEWAY_API_KEY pendentes) | 2026-07-08 |
 | 3. Editor | 0/1 | Not started | - |
 | 4. Publicar | 0/1 | Not started | - |
 | 5. Proposta | 0/1 | Not started | - |

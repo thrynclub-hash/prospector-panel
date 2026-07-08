@@ -98,5 +98,20 @@ export function createGooglePlacesClient() {
 
       return (await res.json()) as PlaceResult;
     },
+
+    /**
+     * Baixa os bytes de uma foto do Places (Photo Media, New). Retorna o
+     * Buffer -- NUNCA construir a URL de mídia direto num <img src> no
+     * cliente, isso vazaria a API key pro navegador do visitante. Quem chama
+     * isto deve re-hospedar o resultado (ver lib/storage/assets.ts).
+     */
+    async fetchPhotoBytes(photoName: string, maxWidthPx = 800): Promise<{ bytes: Buffer; contentType: string } | null> {
+      const res = await fetch(
+        `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=${maxWidthPx}&key=${apiKey}&skipHttpRedirect=false`
+      );
+      if (!res.ok) return null;
+      const arrayBuffer = await res.arrayBuffer();
+      return { bytes: Buffer.from(arrayBuffer), contentType: res.headers.get("content-type") ?? "image/jpeg" };
+    },
   };
 }
