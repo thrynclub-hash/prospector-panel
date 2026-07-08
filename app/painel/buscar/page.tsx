@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowLeft, Star, Mail, Globe, HelpCircle } from "lucide-react";
+import { ArrowLeft, Star, Mail, Globe, HelpCircle, Sparkles, Eye } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { checkQuota } from "@/lib/quota";
 import { getEnrichedLeads } from "@/lib/leads";
@@ -23,6 +23,16 @@ export default async function BuscarPage() {
     checkQuota(supabase, user.id, "search"),
     getEnrichedLeads(supabase, user.id),
   ]);
+
+  // Quais leads já têm redesign gerado -- sem isso, a lista não distingue
+  // "nunca gerei" de "já gerei, só preciso ver de novo" (motivo real do
+  // usuário achar que um redesign tinha "sumido": tava lá, só não tinha
+  // like nenhum indicando isso na lista).
+  const leadIds = leads.map((l) => l.id);
+  const { data: existingRedesigns } = leadIds.length
+    ? await supabase.from("redesigns").select("lead_id").eq("user_id", user.id).in("lead_id", leadIds)
+    : { data: [] as { lead_id: string }[] };
+  const leadIdsWithRedesign = new Set((existingRedesigns ?? []).map((r) => r.lead_id));
 
   return (
     <main className="min-h-screen bg-bg px-6 py-16">
@@ -74,9 +84,21 @@ export default async function BuscarPage() {
                 </div>
                 <Link
                   href={`/painel/leads/${lead.id}/redesenhar`}
-                  className="shrink-0 px-4 py-2 rounded-xl border border-border text-sm font-medium text-ink hover:border-accent hover:text-accent transition-colors"
+                  className={
+                    leadIdsWithRedesign.has(lead.id)
+                      ? "shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-good-bg text-good text-sm font-medium hover:opacity-80 transition-opacity"
+                      : "shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border text-sm font-medium text-ink hover:border-accent hover:text-accent transition-colors"
+                  }
                 >
-                  Redesenhar
+                  {leadIdsWithRedesign.has(lead.id) ? (
+                    <>
+                      <Eye size={14} /> Ver redesign
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={14} /> Redesenhar
+                    </>
+                  )}
                 </Link>
               </div>
             ))}
