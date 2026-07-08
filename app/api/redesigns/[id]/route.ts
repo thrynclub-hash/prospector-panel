@@ -34,6 +34,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     facts: currentContent.facts,
     generated: body.generated ?? currentContent.generated,
     photos: body.photos ?? currentContent.photos,
+    theme: currentContent.theme,
   };
 
   const { data: redesign, error } = await supabase
