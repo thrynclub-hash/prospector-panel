@@ -1,14 +1,9 @@
-import { redirect } from "next/navigation";
 import { Target } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function PainelPage() {
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
 
   return (
     <main className="min-h-screen bg-bg px-6 py-16">
@@ -20,7 +15,7 @@ export default async function PainelPage() {
           <span className="font-display font-bold text-ink text-lg">Hunter of Bad Pages</span>
         </div>
 
-        <h1 className="font-display font-bold text-3xl text-ink mb-3">Bem-vindo, {user.email}</h1>
+        <h1 className="font-display font-bold text-3xl text-ink mb-3">Bem-vindo, {user?.email}</h1>
         <p className="text-muted mb-10">
           Seu acesso está ativo. O painel de prospecção completo está sendo construído agora — em breve
           você vai poder buscar leads, gerar propostas e enviar tudo por aqui.
