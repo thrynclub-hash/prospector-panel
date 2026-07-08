@@ -78,10 +78,10 @@ Plans:
   1. Quando o site original tem logo/paleta/fotos identificáveis, o redesign gerado os reaproveita, em vez de usar só template neutro + Places Photos
   2. Quando não for possível extrair (site bloqueia scraping, sem logo claro, etc.), a geração cai no comportamento de hoje sem quebrar
   3. Só se aplica a redesigns gerados a partir de agora -- sem migração/reprocessamento de redesigns já existentes
-**Plans:** TBD (refinar em `/gsd:plan-phase 02.1`)
+**Plans:** 1 plan em 1 wave (planejado, verificado, aguardando execução)
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 02.1 to break down)
+- [ ] 02.1-01: Schema (`theme` sibling key) + Microlink `meta=true` (logo) + `lib/site-scrape.ts` (fotos + theme-color) + wiring em generate/PATCH/preview
 
 ### Phase 3: Editor
 **Goal**: Assinante ajusta o que a IA gerou antes de publicar ou enviar.
