@@ -6,6 +6,15 @@
 // `reviews`, `editorialSummary` ou qualquer campo de atmosphere -- isso muda o
 // preço da chamada inteira pro tier Enterprise ($35-40/1000), mesmo que só um
 // campo caro tenha sido pedido (STACK.md §"What NOT to Use").
+//
+// NOTA (2026-07, Fase 5): segundo a documentação atual do Google (Place Data
+// Fields), `internationalPhoneNumber` é campo tier Enterprise -- mas
+// `rating`, `userRatingCount` e `websiteUri` (já pedidos acima) TAMBÉM são
+// Enterprise hoje, então esta chamada provavelmente já era billada nesse
+// tier antes desta mudança, independente dela. O comentário "Pro tier" acima
+// pode estar desatualizado -- reverificar em
+// https://developers.google.com/maps/documentation/places/web-service/data-fields
+// se o custo real da fatura do Google Cloud for motivo de dúvida.
 const PRO_TIER_FIELD_MASK = [
   "places.id",
   "places.displayName",
@@ -16,6 +25,7 @@ const PRO_TIER_FIELD_MASK = [
   "places.websiteUri",
   "places.primaryType",
   "places.photos",
+  "places.internationalPhoneNumber",
 ].join(",");
 
 const DETAILS_FIELD_MASK = [
@@ -28,6 +38,7 @@ const DETAILS_FIELD_MASK = [
   "websiteUri",
   "primaryType",
   "photos",
+  "internationalPhoneNumber",
 ].join(",");
 
 export interface PlaceResult {
@@ -40,6 +51,7 @@ export interface PlaceResult {
   websiteUri?: string;
   primaryType?: string;
   photos?: Array<{ name: string }>;
+  internationalPhoneNumber?: string;
 }
 
 export function createGooglePlacesClient() {
