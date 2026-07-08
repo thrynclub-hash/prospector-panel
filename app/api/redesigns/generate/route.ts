@@ -37,57 +37,70 @@ export async function POST(request: Request) {
   }
 
   const placesClient = createGooglePlacesClient();
-  const details = await placesClient.getDetails(lead.place_id);
-  if (!details) {
-    return NextResponse.json({ error: "Negócio não encontrado no Places (place_id inválido/expirado)" }, { status: 404 });
-  }
+  let content: RedesignContent;
+  let beforeScreenshotUrl: string | null;
 
-  // Fotos: re-hospedadas no Storage -- nunca a URL de mídia do Places direto
-  // (vazaria a API key pro navegador quando isto for exibido publicamente na
-  // Fase 4). Sem logo dedicado (Places não distingue "logo" de foto comum) --
-  // a UI cai pra composição tipográfica quando photoUrls está vazio, nunca
-  // inventa um logo (skill redesign-premium, regra 2).
-  const photoNames = (details.photos ?? []).slice(0, 3).map((p) => p.name);
-  const photoUrls: string[] = [];
-  for (const photoName of photoNames) {
-    const photo = await placesClient.fetchPhotoBytes(photoName).catch(() => null);
-    if (!photo) continue;
-    const ext = photo.contentType.includes("png") ? "png" : "jpg";
-    const url = await uploadAsset(supabase, {
-      userId: user.id,
-      path: `${leadId}/photo-${photoUrls.length}.${ext}`,
-      bytes: photo.bytes,
-      contentType: photo.contentType,
-    }).catch(() => null);
-    if (url) photoUrls.push(url);
-  }
+  try {
+    const details = await placesClient.getDetails(lead.place_id);
+    if (!details) {
+      return NextResponse.json({ error: "Negócio não encontrado no Places (place_id inválido/expirado)" }, { status: 404 });
+    }
 
-  const beforeScreenshotUrl = lead.has_own_website && details.websiteUri
-    ? await captureScreenshot(details.websiteUri)
-    : null;
+    // Fotos: re-hospedadas no Storage -- nunca a URL de mídia do Places direto
+    // (vazaria a API key pro navegador quando isto for exibido publicamente na
+    // Fase 4). Sem logo dedicado (Places não distingue "logo" de foto comum) --
+    // a UI cai pra composição tipográfica quando photoUrls está vazio, nunca
+    // inventa um logo (skill redesign-premium, regra 2).
+    const photoNames = (details.photos ?? []).slice(0, 3).map((p) => p.name);
+    const photoUrls: string[] = [];
+    for (const photoName of photoNames) {
+      const photo = await placesClient.fetchPhotoBytes(photoName).catch(() => null);
+      if (!photo) continue;
+      const ext = photo.contentType.includes("png") ? "png" : "jpg";
+      const url = await uploadAsset(supabase, {
+        userId: user.id,
+        path: `${leadId}/photo-${photoUrls.length}.${ext}`,
+        bytes: photo.bytes,
+        contentType: photo.contentType,
+      }).catch(() => null);
+      if (url) photoUrls.push(url);
+    }
 
-  const generated = await generateRedesignCopy({
-    name: details.displayName?.text ?? "(sem nome)",
-    category: details.primaryType ?? null,
-    address: details.formattedAddress ?? null,
-    rating: details.rating ?? null,
-    userRatingCount: details.userRatingCount ?? null,
-    badSiteReason: lead.has_own_website ? "Site próprio com problemas de qualidade/performance" : "Sem site próprio",
-  });
+    beforeScreenshotUrl = lead.has_own_website && details.websiteUri
+      ? await captureScreenshot(details.websiteUri)
+      : null;
 
-  const content: RedesignContent = {
-    facts: {
+    const generated = await generateRedesignCopy({
       name: details.displayName?.text ?? "(sem nome)",
       category: details.primaryType ?? null,
       address: details.formattedAddress ?? null,
-      phone: null,
-      websiteUrl: details.websiteUri ?? null,
       rating: details.rating ?? null,
       userRatingCount: details.userRatingCount ?? null,
-    },
-    generated,
-    photos: { logoUrl: null, photoUrls },
-  };
+      badSiteReason: lead.has_own_website ? "Site próprio com problemas de qualidade/performance" : "Sem site próprio",
+    });
+
+    content = {
+      facts: {
+        name: details.displayName?.text ?? "(sem nome)",
+        category: details.primaryType ?? null,
+        address: details.formattedAddress ?? null,
+        phone: null,
+        websiteUrl: details.websiteUri ?? null,
+        rating: details.rating ?? null,
+        userRatingCount: details.userRatingCount ?? null,
+      },
+      generated,
+      photos: { logoUrl: null, photoUrls },
+    };
+  } catch (err) {
+    // Erros daqui (Places, AI Gateway, Storage) não podem virar um 500 HTML
+    // sem corpo JSON -- o cliente não consegue mostrar a mensagem real e cai
+    // no fallback genérico "Erro de conexão" (foi exatamente o que aconteceu
+    // com o erro de cartão de crédito do AI Gateway).
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("redesigns/generate: erro na geração", err);
+    return NextResponse.json({ error: `Geração falhou: ${message}` }, { status: 502 });
+  }
 
   await recordUsage(supabase, user.id, "redesign_generate");
 
