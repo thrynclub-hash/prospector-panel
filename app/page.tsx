@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowRight, Target, Search, Sparkles, Send, Check } from "lucide-react";
 
 const CHECKOUT_URL = "https://pay.kiwify.com.br/eGdFlZ3";
@@ -5,8 +6,34 @@ const CHECKOUT_URL = "https://pay.kiwify.com.br/eGdFlZ3";
 export default function Home() {
   return (
     <main className="min-h-screen bg-bg overflow-x-clip">
+      {/* ---------- HEADER ---------- */}
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-bg/75 border-b border-border">
+        <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-accent/10 text-accent-dim flex items-center justify-center">
+              <Target size={16} />
+            </div>
+            <span className="font-display font-bold text-ink text-sm">Hunter of Bad Pages</span>
+          </div>
+          <div className="flex items-center gap-5">
+            <Link
+              href="/login"
+              className="text-muted hover:text-ink text-sm font-semibold transition-colors hidden sm:block"
+            >
+              Já sou assinante
+            </Link>
+            <a
+              href={CHECKOUT_URL}
+              className="inline-flex items-center gap-1.5 bg-accent text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-accent-dim transition-colors"
+            >
+              Quero acesso <ArrowRight size={14} />
+            </a>
+          </div>
+        </div>
+      </header>
+
       {/* ---------- HERO ---------- */}
-      <section className="relative pt-20 pb-24 md:pt-28 md:pb-32 px-6">
+      <section className="relative pt-16 pb-24 md:pt-20 md:pb-32 px-6">
         <div
           className="absolute -top-24 right-0 w-[520px] h-[520px] bg-violet/[0.10] blur-[140px] rounded-full pointer-events-none"
           aria-hidden
