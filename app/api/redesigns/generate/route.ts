@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import { requireActiveUser } from "@/lib/auth-guard";
 import { checkQuota, recordUsage } from "@/lib/quota";
 import { createGooglePlacesClient } from "@/lib/google-places/client";
-import { uploadAsset } from "@/lib/storage/assets";
-import { captureScreenshot } from "@/lib/screenshot";
+import { uploadAsset, uploadFromUrl } from "@/lib/storage/assets";
+import { captureSiteVisuals } from "@/lib/screenshot";
+import { scrapeSiteAssets } from "@/lib/site-scrape";
 import { generateRedesignCopy } from "@/lib/ai/generate-redesign";
 import type { RedesignContent } from "@/types/redesign-content";
 
@@ -37,8 +38,10 @@ export async function POST(request: Request) {
   }
 
   const placesClient = createGooglePlacesClient();
-  let content: RedesignContent;
-  let beforeScreenshotUrl: string | null;
+  let placesPhotoUrls: string[];
+  let websiteUri: string | null;
+  let facts: RedesignContent["facts"];
+  let generated: RedesignContent["generated"];
 
   try {
     const details = await placesClient.getDetails(lead.place_id);
@@ -46,31 +49,29 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Negócio não encontrado no Places (place_id inválido/expirado)" }, { status: 404 });
     }
 
-    // Fotos: re-hospedadas no Storage -- nunca a URL de mídia do Places direto
-    // (vazaria a API key pro navegador quando isto for exibido publicamente na
-    // Fase 4). Sem logo dedicado (Places não distingue "logo" de foto comum) --
-    // a UI cai pra composição tipográfica quando photoUrls está vazio, nunca
-    // inventa um logo (skill redesign-premium, regra 2).
+    // Fotos: re-hospedadas no Storage -- nunca a URL de mídia do Places
+    // direto (vazaria a API key pro navegador quando isto for exibido
+    // publicamente na Fase 4). Continuam sendo o FALLBACK quando o site
+    // original não tiver fotos aproveitáveis (REDESENHAR-05) -- ver bloco
+    // não-bloqueante logo abaixo do try/catch.
     const photoNames = (details.photos ?? []).slice(0, 3).map((p) => p.name);
-    const photoUrls: string[] = [];
+    placesPhotoUrls = [];
     for (const photoName of photoNames) {
       const photo = await placesClient.fetchPhotoBytes(photoName).catch(() => null);
       if (!photo) continue;
       const ext = photo.contentType.includes("png") ? "png" : "jpg";
       const url = await uploadAsset(supabase, {
         userId: user.id,
-        path: `${leadId}/photo-${photoUrls.length}.${ext}`,
+        path: `${leadId}/photo-${placesPhotoUrls.length}.${ext}`,
         bytes: photo.bytes,
         contentType: photo.contentType,
       }).catch(() => null);
-      if (url) photoUrls.push(url);
+      if (url) placesPhotoUrls.push(url);
     }
 
-    beforeScreenshotUrl = lead.has_own_website && details.websiteUri
-      ? await captureScreenshot(details.websiteUri)
-      : null;
+    websiteUri = details.websiteUri ?? null;
 
-    const generated = await generateRedesignCopy({
+    generated = await generateRedesignCopy({
       name: details.displayName?.text ?? "(sem nome)",
       category: details.primaryType ?? null,
       address: details.formattedAddress ?? null,
@@ -79,18 +80,14 @@ export async function POST(request: Request) {
       badSiteReason: lead.has_own_website ? "Site próprio com problemas de qualidade/performance" : "Sem site próprio",
     });
 
-    content = {
-      facts: {
-        name: details.displayName?.text ?? "(sem nome)",
-        category: details.primaryType ?? null,
-        address: details.formattedAddress ?? null,
-        phone: details.internationalPhoneNumber ?? null,
-        websiteUrl: details.websiteUri ?? null,
-        rating: details.rating ?? null,
-        userRatingCount: details.userRatingCount ?? null,
-      },
-      generated,
-      photos: { logoUrl: null, photoUrls },
+    facts = {
+      name: details.displayName?.text ?? "(sem nome)",
+      category: details.primaryType ?? null,
+      address: details.formattedAddress ?? null,
+      phone: details.internationalPhoneNumber ?? null,
+      websiteUrl: details.websiteUri ?? null,
+      rating: details.rating ?? null,
+      userRatingCount: details.userRatingCount ?? null,
     };
   } catch (err) {
     // Erros daqui (Places, AI Gateway, Storage) não podem virar um 500 HTML
@@ -101,6 +98,60 @@ export async function POST(request: Request) {
     console.error("redesigns/generate: erro na geração", err);
     return NextResponse.json({ error: `Geração falhou: ${message}` }, { status: 502 });
   }
+
+  // REDESENHAR-05: extração do site original (screenshot, logo, fotos, cor
+  // de marca) roda FORA do try/catch acima de propósito -- é estritamente
+  // aditiva e nunca deve virar um 502 de geração (02.1-RESEARCH.md
+  // "Failure/fallback behavior"). Cada chamada já degrada sozinha pra
+  // null/[] em qualquer falha (mesmo padrão de lib/email-scrape.ts) -- um
+  // site que bloqueia scraping, não tem logo, ou não declara theme-color cai
+  // exatamente no comportamento de hoje: template neutro + fotos do Places.
+  let beforeScreenshotUrl: string | null = null;
+  let finalLogoUrl: string | null = null;
+  let finalPhotoUrls = placesPhotoUrls;
+  let theme: RedesignContent["theme"] = null;
+
+  if (lead.has_own_website && websiteUri) {
+    const siteVisuals = await captureSiteVisuals(websiteUri);
+    beforeScreenshotUrl = siteVisuals.screenshotUrl;
+
+    const scraped = await scrapeSiteAssets(websiteUri);
+
+    // Site original é preferido às fotos do Places quando dá pra extrair
+    // fotos aproveitáveis (CONTEXT.md) -- re-hospedadas exatamente como as
+    // fotos do Places, nunca linkadas direto do site do lead.
+    if (scraped.photoUrls.length > 0) {
+      const rehosted: string[] = [];
+      for (const [index, sourceUrl] of scraped.photoUrls.entries()) {
+        const url = await uploadFromUrl(supabase, {
+          userId: user.id,
+          path: `${leadId}/site-photo-${index}.jpg`,
+          sourceUrl,
+        });
+        if (url) rehosted.push(url);
+      }
+      if (rehosted.length > 0) finalPhotoUrls = rehosted;
+    }
+
+    if (siteVisuals.logoUrl) {
+      finalLogoUrl = await uploadFromUrl(supabase, {
+        userId: user.id,
+        path: `${leadId}/logo.png`,
+        sourceUrl: siteVisuals.logoUrl,
+      });
+    }
+
+    if (scraped.themeColor) {
+      theme = { primaryColor: scraped.themeColor };
+    }
+  }
+
+  const content: RedesignContent = {
+    facts,
+    generated,
+    photos: { logoUrl: finalLogoUrl, photoUrls: finalPhotoUrls },
+    theme,
+  };
 
   await recordUsage(supabase, user.id, "redesign_generate");
 
