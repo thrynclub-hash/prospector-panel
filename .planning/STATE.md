@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-07-07)
 
 **Core value:** O assinante acha um negócio local com site ruim, gera um redesign com comparador antes/depois, e manda uma proposta pronta — tudo dentro do painel.
-**Current focus:** Phase 3 (Editor)
+**Current focus:** Phase 4 (Publicar)
 
 ## Current Position
 
-Phase: 3 of 7 (Editor) — não iniciada
-Plan: 1 of 1 completo na Fase 2
-Status: Fases 1 e 2 implementadas e rodando localmente (build limpo); migrations pendentes de aplicar no banco real, AI_GATEWAY_API_KEY pendente pra testar geração local
-Last activity: 2026-07-08 — Fase 2 (Redesenhar) completa: schema `redesigns.content` congelado (fato/gerado), geração via AI Gateway (Gemini Flash), fotos do Places re-hospedadas, screenshot "antes" via Microlink, comparador visual. Ver `02-redesenhar/02-01-SUMMARY.md`.
+Phase: 4 of 7 (Publicar) — não iniciada
+Plan: 1 of 1 completo na Fase 3
+Status: Fases 1, 2 e 3 implementadas e rodando localmente (build limpo); migrations pendentes de aplicar no banco real, AI_GATEWAY_API_KEY pendente de propagar totalmente
+Last activity: 2026-07-08 — Fase 3 (Editor) completa: edição de texto/foto do redesign com sinalização "gerado por IA", excluir lead/redesign, comparação lado a lado em tela cheia. Ver `03-editor/03-01-SUMMARY.md`.
 
-Progress: [████░░░░░░] ~43% (3/7 fases)
+Progress: [█████░░░░░] ~57% (4/7 fases)
 
 ## Performance Metrics
 
@@ -39,6 +39,9 @@ Progress: [████░░░░░░] ~43% (3/7 fases)
 
 ### Decisions
 
+- **Fase 3**: `content.facts` nunca é editável no Editor (só `generated`/`photos`) — a rota PATCH ignora qualquer coisa que o cliente mande pra `facts`, reconstruindo sempre a partir do valor já salvo.
+- **Fase 3**: Editor usa inputs/textareas simples em vez de Tiptap (citado no ROADMAP original) — YAGNI, sem necessidade de rich-text pros campos atuais.
+- **Gap de qualidade visual identificado (não resolvido ainda)**: o redesign gerado não reusa logo/paleta/fotos do SITE ORIGINAL do lead (só fotos do Google Places) — comparado lado a lado com um site original já bem feito, o redesign atual pode parecer pior visualmente, mesmo tendo conteúdo correto. Corrigir isso exigiria scraping do site original (logo, cores, hero) — combinado com o usuário pra voltar nisso depois da Fase 4.
 - **Fase 2**: `redesigns.content` (jsonb) congelado como `types/redesign-content.ts` ANTES de Editor/Publicar existirem (Anti-Pattern 3 do ARCHITECTURE.md) — mudar esse shape depois exige migração de dados.
 - **Fase 2**: Screenshot "antes" via Microlink (API gratuita, sem chave) em vez de Puppeteer/Playwright self-hosted.
 - **Fase 1**: Corrigida inconsistência entre `ARCHITECTURE.md` (schema `leads` com campos brutos do Places permanentes) e `PITFALLS.md`/`BUSCA-04` (só `place_id` cacheável) — seguido o requirement. Lista de leads salvos re-busca Place Details ao vivo a cada render em vez de ler de coluna cacheada.
@@ -67,5 +70,5 @@ Nenhum ainda.
 ## Session Continuity
 
 Last session: 2026-07-08
-Stopped at: Fases 1 (Buscar) e 2 (Redesenhar) implementadas e testadas localmente (dev server + build de produção limpo). Faltam aplicar as 2 migrations no banco real e configurar AI_GATEWAY_API_KEY antes de testar ponta a ponta. Próximo passo: aplicar migrations/chave, depois `/gsd:discuss-phase 3` ou direto `/gsd:plan-phase 3` pra Editor.
-Resume file: .planning/phases/02-redesenhar/02-01-SUMMARY.md
+Stopped at: Fases 1, 2 e 3 implementadas e testadas localmente (dev server + build de produção limpo). Migration real aplicada com sucesso pelo usuário; AI_GATEWAY_API_KEY configurada (1 geração real confirmada em produção). Gap de qualidade visual do redesign (logo/paleta do site original) identificado e combinado de voltar depois da Fase 4. Próximo passo: `/gsd:discuss-phase 4` ou direto `/gsd:plan-phase 4` pra Publicar.
+Resume file: .planning/phases/03-editor/03-01-SUMMARY.md

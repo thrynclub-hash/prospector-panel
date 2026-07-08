@@ -5,6 +5,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { checkQuota } from "@/lib/quota";
 import { getEnrichedLeads } from "@/lib/leads";
 import { SearchForm } from "./search-form";
+import { DeleteLeadButton } from "./delete-lead-button";
 
 export default async function BuscarPage() {
   const supabase = await createSupabaseServerClient();
@@ -82,24 +83,27 @@ export default async function BuscarPage() {
                     <span className="px-2 py-1 rounded-full bg-violet/10 text-violet capitalize">{lead.status}</span>
                   </div>
                 </div>
-                <Link
-                  href={`/painel/leads/${lead.id}/redesenhar`}
-                  className={
-                    leadIdsWithRedesign.has(lead.id)
-                      ? "shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-good-bg text-good text-sm font-medium hover:opacity-80 transition-opacity"
-                      : "shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border text-sm font-medium text-ink hover:border-accent hover:text-accent transition-colors"
-                  }
-                >
-                  {leadIdsWithRedesign.has(lead.id) ? (
-                    <>
-                      <Eye size={14} /> Ver redesign
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles size={14} /> Redesenhar
-                    </>
-                  )}
-                </Link>
+                <div className="flex items-center gap-2 shrink-0">
+                  <Link
+                    href={`/painel/leads/${lead.id}/redesenhar`}
+                    className={
+                      leadIdsWithRedesign.has(lead.id)
+                        ? "inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-good-bg text-good text-sm font-medium hover:opacity-80 transition-opacity"
+                        : "inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border text-sm font-medium text-ink hover:border-accent hover:text-accent transition-colors"
+                    }
+                  >
+                    {leadIdsWithRedesign.has(lead.id) ? (
+                      <>
+                        <Eye size={14} /> Ver redesign
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles size={14} /> Redesenhar
+                      </>
+                    )}
+                  </Link>
+                  <DeleteLeadButton leadId={lead.id} />
+                </div>
               </div>
             ))}
           </div>

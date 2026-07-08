@@ -29,8 +29,8 @@
 
 ### Editor
 
-- [ ] **EDITOR-01**: Assinante edita textos e troca imagens da página gerada direto no painel
-- [ ] **EDITOR-02**: Campos gerados por IA (não verificados) ficam visualmente sinalizados no editor, pra revisão humana antes de publicar
+- [x] **EDITOR-01**: Assinante edita textos e troca imagens da página gerada direto no painel
+- [x] **EDITOR-02**: Campos gerados por IA (não verificados) ficam visualmente sinalizados no editor, pra revisão humana antes de publicar
 
 ### Publicar
 
@@ -87,8 +87,8 @@ Preenchido durante a criação do roadmap.
 | REDESENHAR-02 | Phase 2 | Complete |
 | REDESENHAR-03 | Phase 2 | Complete |
 | REDESENHAR-04 | Phase 2 | Complete |
-| EDITOR-01 | Phase 3 | Pending |
-| EDITOR-02 | Phase 3 | Pending |
+| EDITOR-01 | Phase 3 | Complete |
+| EDITOR-02 | Phase 3 | Complete |
 | PUBLICAR-01 | Phase 4 | Pending |
 | PUBLICAR-02 | Phase 4 | Pending |
 | PUBLICAR-03 | Phase 4 | Pending |

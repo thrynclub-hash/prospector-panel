@@ -13,7 +13,7 @@ O painel hoje só tem o esqueleto de assinatura (Kiwify + Supabase Auth + `/pain
 - [x] **Phase 0: Fundação** - Guard de auth+assinatura compartilhado no `/painel` + migrations versionadas do Supabase
 - [x] **Phase 1: Buscar** - Busca de leads via Google Maps, compatível com os termos do Places, com limite de uso
 - [x] **Phase 2: Redesenhar** - Geração de landing page por IA + comparador antes/depois, com separação fato/gerado
-- [ ] **Phase 3: Editor** - Edição de texto/imagem da página gerada, com sinalização de campos de IA
+- [x] **Phase 3: Editor** - Edição de texto/imagem da página gerada, com sinalização de campos de IA
 - [ ] **Phase 4: Publicar** - URL pública de demo com aviso, noindex e slug não-adivinhável
 - [ ] **Phase 5: Proposta** - Mensagem de proposta (WhatsApp copiar/colar + e-mail automático) com lista de supressão
 - [ ] **Phase 6: Tabela de Preço** - Tela estática com faixa de preço sugerido pro assinante revender
@@ -76,10 +76,12 @@ Plans:
 **Success Criteria** (o que precisa ser verdade):
   1. Assinante edita texto e troca imagem da página gerada direto no painel
   2. Campos que a IA gerou (não vieram de fonte verificada) ficam visualmente marcados no editor
-**Plans**: TBD
+**Plans**: 1/1 plan executado — Phase COMPLETE (2026-07-08)
 
 Plans:
-- [ ] 03-01: Editor de campos (Tiptap pros textos) + upload de imagem + sinalização de campo gerado por IA
+- [x] 03-01: Editor de campos (inputs/textareas simples, não Tiptap) + upload/remoção de foto + sinalização "gerado por IA" em cada seção editável. Ver `03-01-SUMMARY.md`.
+
+**Extras aproveitados na mesma passada** (pedido explícito do usuário, "não pode esquecer botões necessários"): excluir lead (`leads` list), excluir redesign, e uma página de comparação lado a lado em tela cheia (`/redesenhar/compare`, 50%/50%, cada lado com rolagem própria) pra substituir o comparador de 600px em situações onde ver as duas páginas inteiras importa mais que o efeito de slider.
 
 ### Phase 4: Publicar
 **Goal**: Redesign vira uma URL pública de demonstração seguro pra mostrar ao dono do negócio, sem risco de parecer o site real dele.
@@ -131,7 +133,7 @@ Fases executam em ordem numérica: 0 → 1 → 2 → 3 → 4 → 5 → 6
 | 0. Fundação | 1/1 | Complete | 2026-07-08 |
 | 1. Buscar | 1/1 | Complete (migration pendente de aplicar) | 2026-07-08 |
 | 2. Redesenhar | 1/1 | Complete (migration + AI_GATEWAY_API_KEY pendentes) | 2026-07-08 |
-| 3. Editor | 0/1 | Not started | - |
+| 3. Editor | 1/1 | Complete | 2026-07-08 |
 | 4. Publicar | 0/1 | Not started | - |
 | 5. Proposta | 0/1 | Not started | - |
 | 6. Tabela de Preço | 0/1 | Not started | - |
