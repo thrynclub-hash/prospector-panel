@@ -33,8 +33,8 @@ export default async function RedesignPreviewPage({ params }: { params: Promise<
   }
 
   return (
-    <main className="min-h-screen bg-bg py-8 px-4">
-      <div className="max-w-3xl mx-auto mb-4">
+    <main className="min-h-screen bg-bg">
+      <div className="px-4 py-3">
         <Link
           href={`/painel/leads/${leadId}/redesenhar`}
           className="inline-flex items-center gap-2 text-sm text-muted hover:text-ink"
@@ -42,9 +42,11 @@ export default async function RedesignPreviewPage({ params }: { params: Promise<
           <ArrowLeft size={16} /> Voltar pro comparador
         </Link>
       </div>
-      <div className="max-w-3xl mx-auto">
-        <RedesignPreview content={redesign.content as RedesignContent} />
-      </div>
+      {/* Sem max-w aqui -- RedesignPreview (Fase 02.2) é uma landing page de
+          largura cheia com seções full-bleed (hero, localização); travar num
+          max-w-3xl (resquício da versão simples da Fase 2) espremia o layout
+          inteiro numa coluna estreita. */}
+      <RedesignPreview content={redesign.content as RedesignContent} />
     </main>
   );
 }
