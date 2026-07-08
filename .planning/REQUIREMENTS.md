@@ -41,14 +41,14 @@
 
 ### Proposta
 
-- [ ] **PROPOSTA-01**: Painel gera um texto de proposta citando os problemas específicos detectados no site antigo, sem preço embutido
-- [ ] **PROPOSTA-02**: O texto fica pronto pra copiar/colar num link do WhatsApp (`wa.me`), envio manual pelo assinante
-- [ ] **PROPOSTA-03**: Painel também envia a proposta por e-mail automaticamente via Resend
-- [ ] **PROPOSTA-04**: Negócio que já foi contatado (ou pediu pra não ser) entra numa lista de supressão e não é re-contatado pelo envio automático de e-mail, mesmo por outro assinante
+- [x] **PROPOSTA-01**: Painel gera um texto de proposta citando os problemas específicos detectados no site antigo, sem preço embutido
+- [x] **PROPOSTA-02**: O texto fica pronto pra copiar/colar num link do WhatsApp (`wa.me`), envio manual pelo assinante
+- [x] **PROPOSTA-03**: Painel também envia a proposta por e-mail automaticamente via Resend
+- [x] **PROPOSTA-04**: Negócio que já foi contatado (ou pediu pra não ser) entra numa lista de supressão e não é re-contatado pelo envio automático de e-mail, mesmo por outro assinante
 
 ### Tabela de Preço
 
-- [ ] **PRECO-01**: Painel mostra uma tela com faixa de preço sugerido (redesign R$500–1.000, manutenção R$97/mês) pro assinante usar ao vender pro cliente final
+- [x] **PRECO-01**: Painel mostra uma tela com faixa de preço sugerido (redesign R$500–1.000, manutenção R$97/mês) pro assinante usar ao vender pro cliente final
 
 ## v2 Requirements
 
@@ -93,11 +93,11 @@ Preenchido durante a criação do roadmap.
 | PUBLICAR-02 | Phase 4 | Complete |
 | PUBLICAR-03 | Phase 4 | Complete |
 | PUBLICAR-04 | Phase 4 | Complete |
-| PROPOSTA-01 | Phase 5 | Pending |
-| PROPOSTA-02 | Phase 5 | Pending |
-| PROPOSTA-03 | Phase 5 | Pending |
-| PROPOSTA-04 | Phase 5 | Pending |
-| PRECO-01 | Phase 6 | Pending |
+| PROPOSTA-01 | Phase 5 | Complete |
+| PROPOSTA-02 | Phase 5 | Complete |
+| PROPOSTA-03 | Phase 5 | Complete |
+| PROPOSTA-04 | Phase 5 | Complete |
+| PRECO-01 | Phase 6 | Complete |
 
 **Coverage:**
 - v1 requirements: 22 total

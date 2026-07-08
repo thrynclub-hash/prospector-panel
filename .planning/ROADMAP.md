@@ -15,8 +15,8 @@ O painel hoje só tem o esqueleto de assinatura (Kiwify + Supabase Auth + `/pain
 - [x] **Phase 2: Redesenhar** - Geração de landing page por IA + comparador antes/depois, com separação fato/gerado
 - [x] **Phase 3: Editor** - Edição de texto/imagem da página gerada, com sinalização de campos de IA
 - [x] **Phase 4: Publicar** - URL pública de demo com aviso, noindex e slug não-adivinhável
-- [ ] **Phase 5: Proposta** - Mensagem de proposta (WhatsApp copiar/colar + e-mail automático) com lista de supressão
-- [ ] **Phase 6: Tabela de Preço** - Tela estática com faixa de preço sugerido pro assinante revender
+- [x] **Phase 5: Proposta** - Mensagem de proposta (WhatsApp copiar/colar + e-mail automático) com lista de supressão
+- [x] **Phase 6: Tabela de Preço** - Tela estática com faixa de preço sugerido pro assinante revender
 
 ## Phase Details
 
@@ -106,15 +106,17 @@ Plans:
   2. Existe um botão/link que abre o WhatsApp com o texto pré-preenchido (`wa.me`)
   3. Existe um botão que dispara o e-mail automaticamente via Resend
   4. Um negócio que já recebeu e-mail automático (de qualquer assinante) não recebe de novo
-**Plans**: 6 plans em 3 waves (planejado em `/gsd:plan-phase 5`)
+**Plans**: 6/6 plans executados — Phase COMPLETE (2026-07-08), verificação automatizada `human_needed` (ver `05-VERIFICATION.md`)
 
 Plans:
-- [ ] 05-01 (wave 1): Pré-requisito -- popular `content.facts.phone` (field mask do Places + generate route), hoje sempre `null`
-- [ ] 05-02 (wave 1): Migration `proposals` + `contacted_businesses` (lista de supressão cross-subscriber)
-- [ ] 05-03 (wave 1): `detectSiteProblems()` (função pura) + `generateProposalCopy()` (IA, gera e-mail+WhatsApp numa chamada)
-- [ ] 05-04 (wave 2, depende de 05-02/05-03): Rota `POST`/`PATCH` `/api/redesigns/[id]/proposal` (gera+persiste idempotente, gated por `is_public`; edita antes de enviar)
-- [ ] 05-05 (wave 2, depende de 05-02): Envio via Resend (`lib/email/proposal.ts` + rota `/proposal/send`) com checagem de supressão + rota pública `/unsubscribe/[token]`
-- [ ] 05-06 (wave 3, depende de 05-01/05-04/05-05): UI -- `proposal-section.tsx` + `whatsapp-link.ts`, wired em `redesenhar/page.tsx`
+- [x] 05-01 (wave 1): Pré-requisito -- popular `content.facts.phone` (field mask do Places + generate route), hoje sempre `null`
+- [x] 05-02 (wave 1): Migration `proposals` + `contacted_businesses` (lista de supressão cross-subscriber, opt-out via função `security definer`)
+- [x] 05-03 (wave 1): `detectSiteProblems()` (função pura) + `generateProposalCopy()` (IA, gera e-mail+WhatsApp numa chamada)
+- [x] 05-04 (wave 2): Rota `POST`/`PATCH` `/api/redesigns/[id]/proposal` (gera+persiste idempotente, gated por `is_public`; edita antes de enviar)
+- [x] 05-05 (wave 2): Envio via Resend (`lib/email/proposal.ts` + rota `/proposal/send`) com checagem de supressão + rota pública `/unsubscribe/[token]`
+- [x] 05-06 (wave 3): UI -- `proposal-section.tsx` + `whatsapp-link.ts`, wired em `redesenhar/page.tsx`
+
+**Testado manualmente em produção (2026-07-08):** migration aplicada no banco real; WhatsApp confirmado funcionando de ponta a ponta (link `wa.me` abre com número e texto reais); confirmação em dois cliques do e-mail confirmada. Ainda não testado: envio real de e-mail via Resend, supressão bloqueando reenvio, opt-out, cross-subscriber. Duas melhorias pequenas adicionadas pós-verificação: confirmação visual "Salvo ✓" no botão de editar proposta, e badge de telefone na lista de Buscar (`item.phone`, informativo, não persistido em `leads`).
 
 ### Phase 6: Tabela de Preço
 **Goal**: Assinante sabe quanto cobrar do cliente final.
@@ -122,10 +124,10 @@ Plans:
 **Requirements**: PRECO-01
 **Success Criteria** (o que precisa ser verdade):
   1. Existe uma tela no painel mostrando a faixa de preço sugerido (redesign R$500–1.000, manutenção R$97/mês)
-**Plans**: 1 plan
+**Plans**: 1/1 plan executado — Phase COMPLETE (2026-07-08)
 
 Plans:
-- [ ] 06-01: Tela estática de tabela de preço
+- [x] 06-01: Tela estática `/painel/precos` + card de acesso na dashboard (que também corrigiu a mensagem "🚧 Próximas seções" desatualizada). Ver `06-01-SUMMARY.md`.
 
 ## Progress
 
@@ -140,5 +142,5 @@ Fases executam em ordem numérica: 0 → 1 → 2 → 3 → 4 → 5 → 6
 | 2. Redesenhar | 1/1 | Complete | 2026-07-08 |
 | 3. Editor | 1/1 | Complete | 2026-07-08 |
 | 4. Publicar | 1/1 | Complete | 2026-07-08 |
-| 5. Proposta | 0/1 | Not started | - |
-| 6. Tabela de Preço | 0/1 | Not started | - |
+| 5. Proposta | 6/6 | Complete (testes manuais parciais) | 2026-07-08 |
+| 6. Tabela de Preço | 1/1 | Complete | 2026-07-08 |

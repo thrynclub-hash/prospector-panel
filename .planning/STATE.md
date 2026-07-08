@@ -5,16 +5,15 @@
 See: .planning/PROJECT.md (updated 2026-07-07)
 
 **Core value:** O assinante acha um negócio local com site ruim, gera um redesign com comparador antes/depois, e manda uma proposta pronta — tudo dentro do painel.
-**Current focus:** Phase 5 (Proposta)
+**Current focus:** Milestone v1.0 completo (7 fases). Próximo: gap de qualidade visual do redesign (logo/paleta do site original) e finalizar testes manuais da Fase 5.
 
 ## Current Position
 
-Phase: 5 of 7 (Proposta) — contexto reunido (05-CONTEXT.md), planejamento ainda não iniciado
-Plan: 1 of 1 completo na Fase 4
-Status: Fases 1-4 implementadas, rodando localmente e em produção; as 3 migrations (`leads_and_usage`, `redesigns`, `public_redesigns`) já foram aplicadas no banco real pelo usuário
-Last activity: 2026-07-08 — Fase 4 (Publicar) completa: rota pública `/demo/[slug]` isolada, RLS em 2 camadas, slug nanoid, banner de aviso, noindex duplo. Ver `04-publicar/04-01-SUMMARY.md`. Migration `20260708140000_public_redesigns.sql` aplicada no banco real (view + policies confirmadas com sucesso) e push feito pro remoto.
+Phase: 7 of 7 — todas completas (Fundação, Buscar, Redesenhar, Editor, Publicar, Proposta, Preços)
+Status: Milestone v1.0 100% implementado e deployado em produção. Todas as 4 migrations aplicadas no banco real. Fase 5 (Proposta) tem verificação automatizada `human_needed` — testado manualmente em produção: WhatsApp confirmado funcionando de ponta a ponta (wa.me com número+texto reais), confirmação em dois cliques do e-mail confirmada; ainda faltam testar envio real via Resend, supressão bloqueando reenvio, opt-out, e cross-subscriber (ver `05-proposta/05-VERIFICATION.md`).
+Last activity: 2026-07-08 — Fase 6 (Tabela de Preço) completa: `/painel/precos` estática + card na dashboard (que também corrigiu mensagem "🚧 Próximas seções" desatualizada). Ver `06-tabela-de-pre-o/06-01-SUMMARY.md`.
 
-Progress: [██████░░░░] ~71% (5/7 fases)
+Progress: [██████████] 100% (7/7 fases) — milestone v1.0 completo
 
 ## Performance Metrics
 
@@ -39,6 +38,9 @@ Progress: [██████░░░░] ~71% (5/7 fases)
 
 ### Decisions
 
+- **Fase 6**: Sem script de venda ou tratamento de objeções na tela de preço — só os dois valores do requirement (PRECO-01) + uma frase de contexto. Conteúdo além disso violaria AGENT-INTEGRITY (zero invenção sem fonte).
+- **Fase 5**: Lista de supressão (`contacted_businesses`) é a primeira tabela do produto sem `user_id` de ownership — de propósito, cross-subscriber (PROPOSTA-04). Opt-out público via função `security definer` (`opt_out_business(token)`) que compara o token dentro do corpo da função, nunca via policy RLS (uma policy `using (opt_out_token is not null)` pareceria certa mas não validaria o token de verdade — ver `05-RESEARCH.md`/`05-VERIFICATION.md`).
+- **Fase 5**: `redesigns.content.facts.phone` estava sempre `null` desde a Fase 2 (nunca populado) — corrigido como pré-requisito da Fase 5 (field mask do Places + generate route), não um bug da Fase 2 em si (o campo nunca tinha sido pedido ao Places antes).
 - **Fase 4**: RLS pública em 2 camadas (view `public_redesigns` com `security_invoker=true` + policy direta na tabela `redesigns` pro papel `anon`) — nunca confiar só na view.
 - **Fase 4**: Rota pública (`app/demo/[slug]`) só usa `lib/supabase/public.ts` (anon key, sem cookies) — nunca o client de sessão nem o admin.
 - **Fase 3**: `content.facts` nunca é editável no Editor (só `generated`/`photos`) — a rota PATCH ignora qualquer coisa que o cliente mande pra `facts`, reconstruindo sempre a partir do valor já salvo.
@@ -64,14 +66,16 @@ Nenhum ainda.
 
 ### Blockers/Concerns
 
-- `AI_GATEWAY_API_KEY` já configurada e funcionando em produção (1 geração real confirmada).
+- **Gap de qualidade visual do redesign (aberto desde a Fase 2, ainda não resolvido)**: o redesign gerado não reusa logo/paleta/fotos do SITE ORIGINAL do lead — só fotos do Google Places + template neutro. Confirmado em teste manual real (2026-07-08, lead "Dra. Tania Higaki"): comparado lado a lado, o redesign usa fotos de estoque genéricas (mulher em escritório, sala com sofá) que não têm nada a ver com o negócio real, enquanto o site original tinha fotos reais da dentista. Usuário achou o resultado "horrível" nesse teste. Corrigir exigiria scraping do site original (logo, cores, hero) — **este é o próximo item de trabalho combinado**, ainda não iniciado.
+- **Testes manuais da Fase 5 incompletos**: WhatsApp confirmado funcionando de ponta a ponta em produção; confirmação de dois cliques do e-mail confirmada; envio real via Resend, supressão bloqueando reenvio, opt-out, e cross-subscriber ainda não testados (usuário pausou o teste ao ver a qualidade visual do redesign, não quis mandar e-mail de um redesign que achou ruim).
+- **Deploy na Vercel não promove sozinho pro domínio de produção**: pushes pro `master` geram deployments `READY` mas não atualizam o alias `prospector-panel-delta.vercel.app` automaticamente — precisa rodar `vercel --prod --yes` manualmente depois de cada push (descoberto em 2026-07-08 quando a Fase 5 pareceu "não ter aparecido" em produção, mas na verdade o domínio ainda apontava pro deploy da Fase 4). Vale investigar a configuração de Git Integration da Vercel numa sessão futura pra corrigir isso na raiz.
+- `AI_GATEWAY_API_KEY` e `RESEND_API_KEY` já configuradas e funcionando em produção.
 - **Schema do Places precisa seguir os termos de uso** (só `place_id` cacheável indefinidamente) — resolvido no design da Phase 1 (BUSCA-04), mas é a decisão mais fácil de errar por acidente se alguém "simplificar" o schema depois. Ver `.planning/research/PITFALLS.md` Pitfall 1. `ARCHITECTURE.md` ainda tem o schema desatualizado (com campos brutos permanentes) — vale corrigir esse arquivo numa próxima sessão pra não confundir.
-- **`redesigns.content` (schema jsonb) é decisão que trava 3 fases** (Redesenhar escreve, Editor edita, Publicar renderiza) — precisa ser congelado na Phase 2, antes de começar Phase 3/4.
 - Sem revisão jurídica formal do LGPD/Places ToS — pesquisa é grounded em fontes públicas mas não substitui parecer legal antes do lançamento (ver `.planning/research/SUMMARY.md` "Gaps to Address").
-- **Banco Supabase é compartilhado com outros produtos** (ZapFlow, Toqy) — confirmado na Fase 0: `prospector_customers` tem colunas do ZapFlow (`zapi_*`) sobrando. RLS policies e constraints além do que foi introspectado não foram verificadas — checar antes de criar as tabelas novas da Fase 1+ (`leads`, `redesigns`, etc.), já que elas vão viver no mesmo banco.
+- **Banco Supabase é compartilhado com outros produtos** (ZapFlow, Toqy) — confirmado na Fase 0: `prospector_customers` tem colunas do ZapFlow (`zapi_*`) sobrando.
 
 ## Session Continuity
 
 Last session: 2026-07-08
-Stopped at: Fases 1-4 implementadas, testadas localmente e deployadas em produção; todas as 3 migrations aplicadas no banco real (última confirmada nesta sessão, push feito). Contexto da Fase 5 (Proposta) reunido via /gsd:discuss-phase — decisões sobre tom/conteúdo da proposta, fluxo WhatsApp/e-mail, lista de supressão (chave place_id) e onde a tela vive no painel. Próximo passo: /gsd:plan-phase 5. Gap de qualidade visual do redesign (logo/paleta do site original) continua em aberto, combinado de voltar nisso.
-Resume file: .planning/phases/05-proposta/05-CONTEXT.md
+Stopped at: Milestone v1.0 completo — Fases 0-6 todas implementadas, deployadas em produção, todas as 4 migrations aplicadas no banco real. Fase 5 testada manualmente em parte (WhatsApp confirmado, e-mail two-click confirmado; envio real/supressão/opt-out/cross-subscriber pendentes). Próximo trabalho combinado: gap de qualidade visual do redesign (logo/paleta/fotos do site original do lead, em vez de fotos genéricas do Places) — ainda não iniciado, nem discutido em `/gsd:discuss-phase`.
+Resume file: .planning/phases/06-tabela-de-pre-o/06-01-SUMMARY.md

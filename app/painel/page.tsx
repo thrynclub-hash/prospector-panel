@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Target, Search, ArrowRight } from "lucide-react";
+import { Target, Search, DollarSign, ArrowRight } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function PainelPage() {
@@ -18,8 +18,8 @@ export default async function PainelPage() {
 
         <h1 className="font-display font-bold text-3xl text-ink mb-3">Bem-vindo, {user?.email}</h1>
         <p className="text-muted mb-10">
-          Seu acesso está ativo. O painel de prospecção completo está sendo construído agora — em breve
-          você vai poder buscar leads, gerar propostas e enviar tudo por aqui.
+          Seu acesso está ativo. Busque leads, gere redesigns com IA, publique e mande a proposta —
+          tudo direto por aqui.
         </p>
 
         <Link
@@ -38,9 +38,21 @@ export default async function PainelPage() {
           <ArrowRight size={18} className="text-muted shrink-0" />
         </Link>
 
-        <div className="bg-card border border-border rounded-2xl p-8">
-          <p className="text-muted text-sm">🚧 Próximas seções: Redesenhar, Editor, Publicar, Proposta.</p>
-        </div>
+        <Link
+          href="/painel/precos"
+          className="flex items-center justify-between gap-4 bg-card border border-border rounded-2xl p-6 hover:border-accent transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-accent/10 text-accent-dim flex items-center justify-center shrink-0">
+              <DollarSign size={18} />
+            </div>
+            <div>
+              <p className="font-display font-bold text-ink">Tabela de Preço</p>
+              <p className="text-muted text-sm">Faixa sugerida pra cobrar do cliente final</p>
+            </div>
+          </div>
+          <ArrowRight size={18} className="text-muted shrink-0" />
+        </Link>
       </div>
     </main>
   );
